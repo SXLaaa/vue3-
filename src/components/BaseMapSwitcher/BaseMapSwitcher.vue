@@ -1,7 +1,24 @@
 <template>
-  <div class="basemap-toggle">
-    <button @click="toggleBaseMap('vector')">切换到矢量图层</button>
-    <button @click="toggleBaseMap('raster')">切换到影像图层</button>
+  <div class="basemap-toggle-container">
+    <div
+      class="basemap-toggle-button"
+      @mouseenter="showButtons = true"
+      @mouseleave="showButtons = false"
+    >
+      <el-icon class="icon-basemap-toggle"><PictureFilled /></el-icon>
+      <transition-group name="slide-down" tag="div">
+        <div
+          v-if="showButtons"
+          class="basemap-toggle-buttons slide-down-container"
+          key="buttons"
+        >
+          <button @click="toggleBaseMap('vector')">切换到矢量图层</button>
+          <el-icon><Open /></el-icon>
+          <button @click="toggleBaseMap('raster')">切换到影像图层</button>
+          <el-icon><Open /></el-icon>
+        </div>
+      </transition-group>
+    </div>
   </div>
 </template>
 
@@ -9,7 +26,7 @@
 import { ref, onMounted, computed, watch } from "vue";
 import ResourceManager from "@/utils/ResourceManager.js";
 import { useStore } from "vuex";
-
+let showButtons = ref(false); // 控制按钮显示隐藏的布尔值
 const folders = ref([
   {
     index: "1",
@@ -52,7 +69,7 @@ const folders = ref([
 // 获取地图
 let resourceManagerCall = ref(null);
 const store = useStore();
-let currentVisibleLayer = ref("vector"); // 默认显示矢量图层
+let currentVisibleLayer = ref("raster"); // 默认显示矢量图层
 onMounted(async () => {
   setTimeout(() => {
     console.log("Cesium Viewer已初始化完成，开始加载资源...");
@@ -63,7 +80,7 @@ onMounted(async () => {
     );
     // 设置矢量图层默认可见
     const vectorResource = folders.value[0].resources.find(
-      (resource) => resource.layerType === "vector"
+      (resource) => resource.layerType === "raster"
     );
     resourceManagerCall.value.updateResourceVisibility({
       ...vectorResource,
@@ -100,11 +117,61 @@ function toggleBaseMap(layerType) {
 }
 </script>
 
-<style scoped>
-.basemap-toggle {
+<style lang="scss" scoped>
+.basemap-toggle-container {
   position: absolute;
   top: 10px;
   right: 10px;
   z-index: 2;
+}
+
+.basemap-toggle-button {
+  display: inline-block;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.3s ease-in-out;
+  z-index: 3;
+  position: relative;
+  &:hover {
+    opacity: 1;
+  }
+  .icon-basemap-toggle {
+    font-size: 30px;
+    color: white;
+  }
+
+  .slide-down-container {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 100%;
+    background: #fff; // 下拉框背景颜色
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15); // 下拉框阴影效果
+    border-radius: 4px;
+    padding: 10px;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s ease-in-out;
+
+    &.v-enter-active,
+    &.v-leave-active {
+      transition: all 0.3s ease-in-out;
+    }
+
+    &.v-enter-to,
+    &.v-leave {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  .slide-down-enter-active,
+  .slide-down-leave-active {
+    position: absolute;
+  }
+  .button-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
 }
 </style>

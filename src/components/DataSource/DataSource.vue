@@ -14,8 +14,8 @@
         :index="folder.index"
         :popper-append-to-body="true"
       >
-        <template #title>
-          <i :class="folder.icon"></i>
+        <template #title style="display: flex; align-items: center">
+          <el-icon><Operation /></el-icon>
           <span>{{ folder.title }}</span>
         </template>
 
