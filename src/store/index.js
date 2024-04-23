@@ -15,7 +15,6 @@ const state = {
   menuList: storage.getItem("menuList") || [], // 获取菜单权限
   actionList: storage.getItem("actionList") || [], // 获取菜单按钮权限
   cesiumViewer: null,
-  cesiumViewerInitialized: false,
   baseMaps: {
     tiandituApiKey: "b7d87c30876f4af87ccd40c1abac5634",
     VECTOR: {

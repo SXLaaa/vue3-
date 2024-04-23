@@ -26,6 +26,5 @@ export default {
   },
   setViewer(state, viewer) {
     state.cesiumViewer = viewer;
-    state.cesiumViewerInitialized = true;
   },
 };

@@ -20,25 +20,31 @@ const folders = ref([
         index: "1-2",
         layerCode: "37003_sd",
         title: "矢量底图",
-        layerUrl:
-          "https://t{s}.tianditu.gov.cn/vec_w/wmts?service=WMTS&request=GetTile&version=1.0.0&LAYER=vec&tileMatrixSet=w&TileMatrix={TileMatrix}&TileRow={TileRow}&TileCol={TileCol}&style=default&format=tiles&tk=b7d87c30876f4af87ccd40c1abac5634",
+        layerUrl: [
+          "https://t{s}.tianditu.gov.cn/vec_w/wmts?service=WMTS&request=GetTile&version=1.0.0&tileMatrixSet=w&TileMatrix={TileMatrix}&TileRow={TileRow}&TileCol={TileCol}&layer=vec",
+          "https://t{s}.tianditu.gov.cn/cva_w/wmts?service=WMTS&request=GetTile&version=1.0.0&tileMatrixSet=w&TileMatrix={TileMatrix}&TileRow={TileRow}&TileCol={TileCol}&layer=cva",
+        ],
         layerName: "",
         platForm: "tianditu",
         layerType: "vector",
         visible: false,
         dataSource: undefined,
+        tk: "d5b0f0ba1b63b838c65918dfeaf53eb7",
       },
       {
         index: "1-3",
         layerCode: "37004_sd",
         title: "影像底图",
-        layerUrl:
-          "http://t6.tianditu.gov.cn/img_w/wmts?tk=b7d87c30876f4af87ccd40c1abac5634",
+        layerUrl: [
+          "https://t{s}.tianditu.gov.cn/img_w/wmts?service=WMTS&request=GetTile&version=1.0.0&tileMatrixSet=w&TileMatrix={TileMatrix}&TileRow={TileRow}&TileCol={TileCol}&layer=img",
+          "https://t{s}.tianditu.gov.cn/cia_w/wmts?service=WMTS&request=GetTile&version=1.0.0&tileMatrixSet=w&TileMatrix={TileMatrix}&TileRow={TileRow}&TileCol={TileCol}&layer=cia",
+        ],
         layerName: "",
         platForm: "tianditu",
         layerType: "raster",
         visible: false,
         dataSource: undefined,
+        tk: "d5b0f0ba1b63b838c65918dfeaf53eb7",
       },
     ],
   },
@@ -47,32 +53,6 @@ const folders = ref([
 let resourceManagerCall = ref(null);
 const store = useStore();
 let currentVisibleLayer = ref("vector"); // 默认显示矢量图层
-
-// watch(
-//   () => store.state.cesiumViewerInitialized,
-//   async (initialized) => {
-//     if (initialized) {
-//       onMounted(async () => {
-//         console.log("Cesium Viewer已初始化完成，开始加载资源...");
-//         resourceManagerCall.value = new ResourceManager(
-//           "BaseMapSwitcher",
-//           folders.value,
-//           store.state.cesiumViewer
-//         );
-//         // 设置矢量图层默认可见
-//         const vectorResource = folders.value[0].resources.find(
-//           (resource) => resource.layerType === "vector"
-//         );
-//         resourceManagerCall.value.updateResourceVisibility({
-//           ...vectorResource,
-//           visible: true,
-//         });
-//       });
-//     }
-//   },
-//   { immediate: true }
-// );
-
 onMounted(async () => {
   setTimeout(() => {
     console.log("Cesium Viewer已初始化完成，开始加载资源...");
