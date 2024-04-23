@@ -14,7 +14,7 @@ class LayerLoader {
   load() {
     console.log(this.url, "load-url");
     if (!this.viewer || !this.url) {
-      console.error("Missing required parameters to manage layer visibility");
+      console.error("LayerLoader-错误参数");
       return;
     }
 
@@ -158,7 +158,6 @@ class ResourceManager {
     this.componentId = componentId;
     this.cesiumViewer = cesiumViewer;
     this.resourceMap = new Map();
-    console.log(componentId, resourcesDirectory, cesiumViewer);
     // 遍历资源目录下每一层的资源项
     resourcesDirectory.forEach((folder) => {
       folder.resources.forEach((resourceData) => {
@@ -174,7 +173,7 @@ class ResourceManager {
         this.resourceMap.set(key, layerLoader);
       });
     });
-    console.log(this.resourceMap);
+    console.log(this.componentId, this.resourceMap);
   }
 
   updateResourceVisibility(resource) {

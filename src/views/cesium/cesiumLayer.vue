@@ -12,7 +12,7 @@
     <div class="left-menu-container" :class="{ collapsed: !isMenuOpen }">
       <DataSource></DataSource>
     </div>
-    <BaseMapSwitcher></BaseMapSwitcher>
+    <BaseMapSwitcher :cesiumViewer="viewer"></BaseMapSwitcher>
 
     <div id="cesiumContainer"></div>
   </div>

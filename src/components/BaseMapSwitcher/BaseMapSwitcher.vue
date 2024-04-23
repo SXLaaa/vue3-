@@ -12,10 +12,14 @@
           class="basemap-toggle-buttons slide-down-container"
           key="buttons"
         >
-          <button @click="toggleBaseMap('vector')">切换到矢量图层</button>
-          <el-icon><Open /></el-icon>
-          <button @click="toggleBaseMap('raster')">切换到影像图层</button>
-          <el-icon><Open /></el-icon>
+          <div class="row">
+            <button @click="toggleBaseMap('vector')">切换到矢量图层</button>
+            <el-icon class="icon-open"><Open /></el-icon>
+          </div>
+          <div class="row">
+            <button @click="toggleBaseMap('raster')">切换到影像图层</button>
+            <el-icon class="icon-open"><Open /></el-icon>
+          </div>
         </div>
       </transition-group>
     </div>
@@ -23,10 +27,25 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, watch } from "vue";
+import { ref, onMounted, computed, watch, defineProps } from "vue";
 import ResourceManager from "@/utils/ResourceManager.js";
-import { useStore } from "vuex";
-let showButtons = ref(false); // 控制按钮显示隐藏的布尔值
+const props = defineProps({
+  cesiumViewer: {
+    type: Object,
+    required: true,
+    default: () => null,
+  },
+});
+// 监听props变化
+watch(
+  () => props.cesiumViewer,
+  (newVal, oldVal) => {
+    if (newVal && !oldVal) {
+      initializeResourceManager();
+    }
+  },
+  { immediate: true }
+);
 const folders = ref([
   {
     index: "1",
@@ -66,29 +85,28 @@ const folders = ref([
     ],
   },
 ]);
+const showButtons = ref(false); // 控制按钮显示隐藏的布尔值
+
 // 获取地图
 let resourceManagerCall = ref(null);
-const store = useStore();
 let currentVisibleLayer = ref("raster"); // 默认显示矢量图层
-onMounted(async () => {
-  setTimeout(() => {
-    console.log("Cesium Viewer已初始化完成，开始加载资源...");
-    resourceManagerCall.value = new ResourceManager(
-      "BaseMapSwitcher",
-      folders.value,
-      store.state.cesiumViewer
-    );
-    // 设置矢量图层默认可见
-    const vectorResource = folders.value[0].resources.find(
-      (resource) => resource.layerType === "raster"
-    );
-    resourceManagerCall.value.updateResourceVisibility({
-      ...vectorResource,
-      visible: true,
-    });
-  }, 0);
-});
-
+// 初始化地图方法
+function initializeResourceManager() {
+  console.log("初始化viewer");
+  resourceManagerCall.value = new ResourceManager(
+    "BaseMapSwitcher",
+    folders.value,
+    props.cesiumViewer
+  );
+  // 设置矢量图层默认可见
+  const vectorResource = folders.value[0].resources.find(
+    (resource) => resource.layerType === "raster"
+  );
+  resourceManagerCall.value.updateResourceVisibility({
+    ...vectorResource,
+    visible: true,
+  });
+}
 // 切换底图方法
 function toggleBaseMap(layerType) {
   const targetResource = folders.value[0].resources.find(
@@ -98,14 +116,11 @@ function toggleBaseMap(layerType) {
     console.error(`找不到对应于${layerType}图层的资源`);
     return;
   }
-
   currentVisibleLayer.value = layerType; // 更新当前显示的图层
-
   resourceManagerCall.value.updateResourceVisibility({
     ...targetResource,
     visible: true,
   });
-
   // 隐藏当前可见图层（这里可以简化，因为仅存在两个图层且已知layerCode）
   const oldVisibleResource = folders.value[0].resources.find(
     (resource) => resource.layerCode !== targetResource.layerCode
@@ -140,38 +155,19 @@ function toggleBaseMap(layerType) {
     color: white;
   }
 
-  .slide-down-container {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    min-width: 100%;
-    background: #fff; // 下拉框背景颜色
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15); // 下拉框阴影效果
-    border-radius: 4px;
-    padding: 10px;
-    opacity: 0;
-    transform: translateY(10px);
-    transition: all 0.3s ease-in-out;
-
-    &.v-enter-active,
-    &.v-leave-active {
-      transition: all 0.3s ease-in-out;
-    }
-
-    &.v-enter-to,
-    &.v-leave {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
   .slide-down-enter-active,
   .slide-down-leave-active {
-    position: absolute;
+    transition: all 0.3s ease-in-out;
   }
-  .button-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+  .slide-down-enter-to,
+  .slide-down-leave {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .slide-down-enter-from,
+  .slide-down-leave-to {
+    opacity: 0;
+    transform: translateY(10px);
   }
 }
 </style>
