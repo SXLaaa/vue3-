@@ -74,7 +74,6 @@ export default {
             platForm: "dataV",
             layerType: "geojson",
             visible: false,
-            dataSource: undefined,
           },
           {
             index: "1-2",
@@ -86,7 +85,6 @@ export default {
             platForm: "dataV",
             layerType: "geojson",
             visible: false,
-            dataSource: undefined,
           },
         ],
       },
@@ -104,7 +102,6 @@ export default {
       );
     });
     const updateResourceVisibility = (resource) => {
-      console.log(resource);
       resourceManagerCall.value.updateResourceVisibility(resource);
     };
     return {
