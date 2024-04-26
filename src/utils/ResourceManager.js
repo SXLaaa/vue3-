@@ -1,4 +1,4 @@
-import * as Cesium from "cesium";
+const Cesium = window.Cesium;
 
 class LayerLoader {
   constructor(platForm, type, url, visible, viewer, tk) {

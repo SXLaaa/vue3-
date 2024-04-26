@@ -104,7 +104,14 @@ function initializeResourceManager() {
     ...rasterResource,
   });
 
-  console.log(resourceManagerCall, "--resourceManagerCall");
+  console.log(
+    window.Cesium,
+    "-",
+    window.cesiumViewer,
+    "-",
+    resourceManagerCall,
+    "--resourceManagerCall"
+  );
 }
 // 切换底图方法
 function onSwitchChange(resource) {

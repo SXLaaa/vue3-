@@ -48,9 +48,11 @@ export default {
           sceneModePicker: false, // 是否显示3D/2D选择器
           navigationHelpButton: false, // 是否显示右上角的帮助按钮
           baseLayerPicker: false, // 是否显示图层选择器
+          imageryProvider: false, // cesium默认图层
         });
         try {
           configureCesium(viewer.value);
+          window.cesiumViewer = viewer.value;
           store.commit("setViewer", viewer.value);
         } catch (error) {
           console.error("Cesium configuration failed:", error);
