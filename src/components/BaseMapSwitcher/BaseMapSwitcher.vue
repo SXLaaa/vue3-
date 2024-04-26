@@ -115,7 +115,6 @@ function initializeResourceManager() {
 }
 // 切换底图方法
 function onSwitchChange(resource) {
-  // Vue.set(resource, "visible", !resource.visible);
   setTimeout(() => {
     resourceManagerCall.value.updateResourceVisibility(resource);
   }, 0);

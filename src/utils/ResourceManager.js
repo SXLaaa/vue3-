@@ -50,88 +50,102 @@ class LayerLoader {
   // 新增加载天地图底图的方法
   manageTianDiTuLayers(type) {
     if (this.visible) {
-      this.loadTianDiTuLayers(type);
+      this.removeTianDiTuLayers(); // 先移除已有的天地图图层
+      this.loadTianDiTuLayers(type); // 再加载新的天地图图层
     } else {
       this.removeTianDiTuLayers();
     }
   }
   async loadTianDiTuLayers(type) {
-    let mainLayer;
-    let annotationLayer;
+    if (this.tiandituMainLayer && this.tiandituAnnotationLayer) {
+      this.tiandituMainLayer.show = this.visible;
+      this.tiandituAnnotationLayer.show = this.visible;
+    } else {
+      let mainLayer;
+      let annotationLayer;
 
-    const addLayerWithProvider = async (
-      providerConfig,
-      isAnnotationLayer = false
-    ) => {
-      const imageryProvider = new Cesium.WebMapTileServiceImageryProvider(
-        providerConfig
-      );
-      const imageryLayer = new Cesium.ImageryLayer(imageryProvider);
-      this.viewer.imageryLayers.add(imageryLayer, isAnnotationLayer ? 1 : 0);
-      return imageryLayer;
-    };
+      const addLayerWithProvider = async (
+        providerConfig,
+        isAnnotationLayer = false
+      ) => {
+        const imageryProvider = new Cesium.WebMapTileServiceImageryProvider(
+          providerConfig
+        );
+        const imageryLayer = new Cesium.ImageryLayer(imageryProvider);
+        this.viewer.imageryLayers.add(imageryLayer, isAnnotationLayer ? 1 : 0);
+        return imageryLayer;
+      };
 
-    switch (type) {
-      case "vector":
-        mainLayer = await addLayerWithProvider({
-          url: this.url[0] + "&tk=" + this.tk,
-          subdomains: ["0", "1", "2", "3", "4", "5", "6", "7"],
-          layer: "vec",
-          style: "default",
-          format: "image/png",
-          tileMatrixSetID: "GoogleMapsCompatible",
-          maximumLevel: 18,
-        });
-
-        annotationLayer = await addLayerWithProvider(
-          {
-            url: this.url[1] + "&tk=" + this.tk,
+      switch (type) {
+        case "vector":
+          mainLayer = await addLayerWithProvider({
+            url: this.url[0] + "&tk=" + this.tk,
             subdomains: ["0", "1", "2", "3", "4", "5", "6", "7"],
-            layer: "cva",
+            layer: "vec",
             style: "default",
             format: "image/png",
             tileMatrixSetID: "GoogleMapsCompatible",
             maximumLevel: 18,
-            isAnnotationLayer: true,
-          },
-          true
-        );
-        break;
+          });
 
-      case "raster":
-        mainLayer = await addLayerWithProvider({
-          url: this.url[0] + "&tk=" + this.tk,
-          subdomains: ["0", "1", "2", "3", "4", "5", "6", "7"],
-          layer: "img",
-          style: "default",
-          format: "image/png",
-          tileMatrixSetID: "GoogleMapsCompatible",
-          maximumLevel: 18,
-        });
+          annotationLayer = await addLayerWithProvider(
+            {
+              url: this.url[1] + "&tk=" + this.tk,
+              subdomains: ["0", "1", "2", "3", "4", "5", "6", "7"],
+              layer: "cva",
+              style: "default",
+              format: "image/png",
+              tileMatrixSetID: "GoogleMapsCompatible",
+              maximumLevel: 18,
+              isAnnotationLayer: true,
+            },
+            true
+          );
+          break;
 
-        annotationLayer = await addLayerWithProvider(
-          {
-            url: this.url[1] + "&tk=" + this.tk,
+        case "raster":
+          mainLayer = await addLayerWithProvider({
+            url: this.url[0] + "&tk=" + this.tk,
             subdomains: ["0", "1", "2", "3", "4", "5", "6", "7"],
-            layer: "cia",
+            layer: "img",
             style: "default",
             format: "image/png",
             tileMatrixSetID: "GoogleMapsCompatible",
             maximumLevel: 18,
-            isAnnotationLayer: true,
-          },
-          true
-        );
-        break;
+          });
 
-      default:
-        console.warn(`Unknown TianDiTu layer type: ${type}`);
-        return;
+          annotationLayer = await addLayerWithProvider(
+            {
+              url: this.url[1] + "&tk=" + this.tk,
+              subdomains: ["0", "1", "2", "3", "4", "5", "6", "7"],
+              layer: "cia",
+              style: "default",
+              format: "image/png",
+              tileMatrixSetID: "GoogleMapsCompatible",
+              maximumLevel: 18,
+              isAnnotationLayer: true,
+            },
+            true
+          );
+          break;
+
+        default:
+          console.warn(`Unknown TianDiTu layer type: ${type}`);
+          return;
+      }
+
+      // 直接保存加载好的图层实例
+      this.tiandituMainLayer = mainLayer;
+      this.tiandituAnnotationLayer = annotationLayer;
+      // 将主图层提升至最顶层
+      if (mainLayer) {
+        this.viewer.imageryLayers.raiseToTop(mainLayer);
+      }
+      // 将注记图层提升至最顶层
+      if (annotationLayer) {
+        this.viewer.imageryLayers.raiseToTop(annotationLayer);
+      }
     }
-
-    // 直接保存加载好的图层实例
-    this.tiandituMainLayer = mainLayer;
-    this.tiandituAnnotationLayer = annotationLayer;
   }
 
   // 新增移除天地图矢量底图的方法
