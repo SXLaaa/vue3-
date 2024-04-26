@@ -103,6 +103,8 @@ function initializeResourceManager() {
   resourceManagerCall.value.updateResourceVisibility({
     ...rasterResource,
   });
+
+  console.log(resourceManagerCall, "--resourceManagerCall");
 }
 // 切换底图方法
 function onSwitchChange(resource) {
