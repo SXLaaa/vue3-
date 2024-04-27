@@ -11,7 +11,7 @@
       <el-submenu
         v-for="(folder, folderIndex) in folders"
         :key="folderIndex"
-        :index="folder.index"
+        :index="folderIndex"
         :popper-append-to-body="true"
       >
         <template #title style="display: flex; align-items: center">
@@ -60,12 +60,10 @@ export default {
     const openedMenus = ref(["1"]);
     const folders = ref([
       {
-        index: "1",
-        title: "土地资源",
+        title: "矢量图层",
         icon: "el-icon-folder",
         resources: [
           {
-            index: "1-1",
             layerCode: "37000_sd",
             title: "Geojson",
             layerUrl:
@@ -74,17 +72,35 @@ export default {
             platForm: "dataV",
             layerType: "geojson",
             visible: false,
+            tk: "",
           },
           {
-            index: "1-2",
-            layerCode: "37001_sd",
-            title: "Geojson",
+            layerCode: "37001_kml",
+            title: "KML",
             layerUrl:
               "https://geo.datav.aliyun.com/areas_v3/bound/geojson?code=370009_full",
             layerName: "",
             platForm: "dataV",
-            layerType: "geojson",
+            layerType: "kml",
             visible: false,
+            tk: "",
+          },
+        ],
+      },
+      {
+        title: "影像图层",
+        icon: "el-icon-folder",
+        resources: [
+          {
+            layerCode: "37000_sd",
+            title: "天地图影影像",
+            layerUrl:
+              "https://t{s}.tianditu.gov.cn/img_w/wmts?service=WMTS&request=GetTile&version=1.0.0&tileMatrixSet=w&TileMatrix={TileMatrix}&TileRow={TileRow}&TileCol={TileCol}&layer=img",
+            layerName: "",
+            platForm: "tianditu",
+            layerType: "raster",
+            visible: false,
+            tk: "d5b0f0ba1b63b838c65918dfeaf53eb7",
           },
         ],
       },
