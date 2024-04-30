@@ -92,15 +92,15 @@ export default {
         icon: "el-icon-folder",
         resources: [
           {
-            layerCode: "37000_sd",
-            title: "天地图影影像",
+            layerCode: "37004_sd",
+            title: "影像",
             layerUrl:
               "https://t{s}.tianditu.gov.cn/img_w/wmts?service=WMTS&request=GetTile&version=1.0.0&tileMatrixSet=w&TileMatrix={TileMatrix}&TileRow={TileRow}&TileCol={TileCol}&layer=img",
-            layerName: "",
+            layerName: "img",
             platForm: "tianditu",
             layerType: "raster",
             visible: false,
-            tk: "d5b0f0ba1b63b838c65918dfeaf53eb7",
+            tk: "b7d87c30876f4af87ccd40c1abac5634",
           },
         ],
       },

@@ -61,7 +61,7 @@ const foldersBasemap = reactive([
         title: "影像",
         layerUrl: [
           "https://t{s}.tianditu.gov.cn/img_w/wmts?service=WMTS&request=GetTile&version=1.0.0&tileMatrixSet=w&TileMatrix={TileMatrix}&TileRow={TileRow}&TileCol={TileCol}&layer=img",
-          "https://t{s}.tianditu.gov.cn/cia_w/wmts?service=WMTS&request=GetTile&version=1.0.0&tileMatrixSet=w&TileMatrix={TileMatrix}&TileRow={TileRow}&TileCol={TileCol}&layer=cia",
+          // "https://t{s}.tianditu.gov.cn/cia_w/wmts?service=WMTS&request=GetTile&version=1.0.0&tileMatrixSet=w&TileMatrix={TileMatrix}&TileRow={TileRow}&TileCol={TileCol}&layer=cia",
         ],
         layerName: "img",
         platForm: "tianditu",
@@ -83,7 +83,6 @@ watch(
   },
   { immediate: true }
 );
-
 // 初始化影像地图方法
 function initializeResourceManager() {
   console.log(foldersBasemap[0], "初始化viewer");
@@ -100,15 +99,6 @@ function initializeResourceManager() {
   resourceManagerCall.value.updateResourceVisibility({
     ...rasterResource,
   });
-
-  console.log(
-    window.Cesium,
-    "-",
-    window.cesiumViewer,
-    "-",
-    resourceManagerCall,
-    "--resourceManagerCall"
-  );
 }
 // 切换底图方法
 function onSwitchChange(resource) {
