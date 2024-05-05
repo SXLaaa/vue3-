@@ -15,9 +15,12 @@ class TianDiTuLayerLoader {
       console.error("LayerLoader-错误参数");
       return;
     }
-
-    this.removeTianDiTuLayers();
-
+    if (this.visible) {
+      this.removeTianDiTuLayers();
+    } else {
+      this.removeTianDiTuLayers();
+      return;
+    }
     const createLayerProvider = (url, layerName, format = "image/png") => {
       if (typeof url === "string") {
         const urlWithTk =

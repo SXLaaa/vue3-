@@ -7,7 +7,6 @@ class ResourceManager {
     this.componentId = componentId;
     this.cesiumViewer = cesiumViewer;
     this.resourceMap = new Map();
-
     resourcesDirectory.forEach((folder) => {
       folder.resources.forEach((resourceData) => {
         const key = `${this.componentId}_${resourceData.layerCode}`;
@@ -15,22 +14,22 @@ class ResourceManager {
 
         if (resourceData.platForm === "tianditu") {
           layerLoader = new TianDiTuLayerLoader(
-            resourceData.urls,
+            resourceData.layerUrl,
             resourceData.tk,
             cesiumViewer
           );
         } else if (
           resourceData.platForm === "dataV" &&
-          resourceData.type === "geojson"
+          resourceData.layerType === "geojson"
         ) {
           layerLoader = new GeoJsonLayerLoader(
-            resourceData.urls,
+            resourceData.layerUrl,
             cesiumViewer,
             resourceData.visible
           );
         } else {
           console.warn(
-            `Unsupported platform or layer type: ${resourceData.platForm}, ${resourceData.type}`
+            `Unsupported platform or layer layerType: ${resourceData.platForm}, ${resourceData.layerType}`
           );
           return;
         }
@@ -41,10 +40,6 @@ class ResourceManager {
   }
 
   updateResourceVisibility(resource) {
-    console.log(
-      "🚀 ~ file: ResourceManager.js:44 ~ ResourceManager ~ updateResourceVisibility ~ resource:",
-      resource
-    );
     if (!resource.layerCode || !resource.layerType || !resource.layerUrl) {
       console.error("无layerCode || 无layerType || 无layerUrl");
       return;
@@ -64,7 +59,7 @@ class ResourceManager {
     layerLoader.visible = resource.visible;
     // 根据平台类型调用对应的加载方法
     if (layerLoader instanceof TianDiTuLayerLoader) {
-      layerLoader.manageTianDiTuLayers(resource.type);
+      layerLoader.manageTianDiTuLayers(resource.layerType);
     } else if (layerLoader instanceof GeoJsonLayerLoader) {
       layerLoader.loadGeoJsonLayer();
     }
