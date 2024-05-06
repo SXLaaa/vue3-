@@ -1,6 +1,7 @@
 // ResourceManager.js
 import TianDiTuLayerLoader from "./TianDiTuLayer";
 import GeoJsonLayerLoader from "./GeoJsonLayerLoader";
+import ThreeDTilesLayerLoader from "./ThreeDTilesLayerLoader";
 
 class ResourceManager {
   constructor(componentId, resourcesDirectory, cesiumViewer) {
@@ -15,8 +16,8 @@ class ResourceManager {
         if (resourceData.platForm === "tianditu") {
           layerLoader = new TianDiTuLayerLoader(
             resourceData.layerUrl,
-            resourceData.tk,
-            cesiumViewer
+            cesiumViewer,
+            resourceData.tk
           );
         } else if (
           resourceData.platForm === "dataV" &&
@@ -24,8 +25,12 @@ class ResourceManager {
         ) {
           layerLoader = new GeoJsonLayerLoader(
             resourceData.layerUrl,
-            cesiumViewer,
-            resourceData.visible
+            cesiumViewer
+          );
+        } else if (resourceData.platForm === "model") {
+          layerLoader = new ThreeDTilesLayerLoader(
+            resourceData.layerUrl,
+            cesiumViewer
           );
         } else {
           console.warn(
@@ -62,6 +67,8 @@ class ResourceManager {
       layerLoader.manageTianDiTuLayers(resource.layerType);
     } else if (layerLoader instanceof GeoJsonLayerLoader) {
       layerLoader.loadGeoJsonLayer();
+    } else if (layerLoader instanceof ThreeDTilesLayerLoader) {
+      layerLoader.load3DTilesLayers();
     }
   }
 }

@@ -2,7 +2,7 @@
 const Cesium = window.Cesium;
 
 class TianDiTuLayerLoader {
-  constructor(urls, tk, viewer) {
+  constructor(urls, viewer, tk) {
     this.urls = Array.isArray(urls) ? urls : [urls, urls];
     this.tk = tk;
     this.viewer = viewer;

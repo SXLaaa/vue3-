@@ -14,9 +14,10 @@
         :index="folderIndex"
         :popper-append-to-body="true"
       >
-        <template #title style="display: flex; align-items: center">
-          <el-icon><Operation /></el-icon>
-          <span>{{ folder.title }}</span>
+        <template #title>
+          <span>
+            <el-icon><Operation /></el-icon>{{ folder.title }}</span
+          >
         </template>
 
         <el-menu-item
@@ -101,6 +102,22 @@ export default {
             layerType: "raster",
             visible: false,
             tk: "b7d87c30876f4af87ccd40c1abac5634",
+          },
+        ],
+      },
+      {
+        title: "模型",
+        icon: "el-icon-folder",
+        resources: [
+          {
+            layerCode: "37005_sd",
+            title: "3Dtiles",
+            layerUrl:
+              "http://earthsdk.com/v/last/Apps/assets/dayanta/tileset.json",
+            layerName: "3dtile测试",
+            platForm: "model",
+            layerType: "3dTiles",
+            visible: false,
           },
         ],
       },
