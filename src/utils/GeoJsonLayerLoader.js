@@ -1,6 +1,6 @@
 // GeoJsonLayerLoader.js
 class GeoJsonLayerLoader {
-  constructor(urls, viewer) {
+  constructor(viewer, urls) {
     this.urls = Array.isArray(urls) ? urls : [urls];
     this.viewer = viewer;
     this.dataSource = null;

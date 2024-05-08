@@ -1,6 +1,6 @@
 // TianDiTuLayer.js
 class TianDiTuLayerLoader {
-  constructor(urls, viewer, tk) {
+  constructor(viewer, urls, tk) {
     this.urls = Array.isArray(urls) ? urls : [urls, urls];
     this.tk = tk;
     this.viewer = viewer;

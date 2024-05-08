@@ -10,31 +10,23 @@ class ResourceManager {
     this.resourceMap = new Map();
     resourcesDirectory.forEach((folder) => {
       folder.resources.forEach((resourceData) => {
+        let { platForm, layerUrl, layerType, tk, ifAdjust } = resourceData;
         const key = `${this.componentId}_${resourceData.layerCode}`;
         let layerLoader;
 
-        if (resourceData.platForm === "tianditu") {
-          layerLoader = new TianDiTuLayerLoader(
-            resourceData.layerUrl,
-            cesiumViewer,
-            resourceData.tk
-          );
-        } else if (
-          resourceData.platForm === "dataV" &&
-          resourceData.layerType === "geojson"
-        ) {
-          layerLoader = new GeoJsonLayerLoader(
-            resourceData.layerUrl,
-            cesiumViewer
-          );
-        } else if (resourceData.platForm === "model") {
+        if (platForm === "tianditu") {
+          layerLoader = new TianDiTuLayerLoader(cesiumViewer, layerUrl, tk);
+        } else if (platForm === "dataV" && layerType === "geojson") {
+          layerLoader = new GeoJsonLayerLoader(cesiumViewer, layerUrl);
+        } else if (platForm === "model") {
           layerLoader = new ThreeDTilesLayerLoader(
-            resourceData.layerUrl,
-            cesiumViewer
+            cesiumViewer,
+            layerUrl,
+            ifAdjust
           );
         } else {
           console.warn(
-            `Unsupported platform or layer layerType: ${resourceData.platForm}, ${resourceData.layerType}`
+            `Unsupported platform or layer layerType: ${platForm}, ${layerType}`
           );
           return;
         }

@@ -111,9 +111,19 @@ export default {
         resources: [
           {
             layerCode: "37005_sd",
-            title: "3Dtiles",
-            layerUrl: "http://localhost:3031/json/tileset.json",
-            layerName: "3dtile测试",
+            title: "海岛",
+            layerUrl: "http://localhost:3031/landTiles/tileset_whole.json",
+            layerName: "海岛",
+            platForm: "model",
+            layerType: "3dTiles",
+            visible: false,
+            ifAdjust: true, // 是否需要调整位置
+          },
+          {
+            layerCode: "37006_sd",
+            title: "建筑",
+            layerUrl: "http://localhost:3031/houseTiles/tileset.json",
+            layerName: "建筑",
             platForm: "model",
             layerType: "3dTiles",
             visible: false,
