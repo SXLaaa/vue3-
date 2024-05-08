@@ -1,41 +1,52 @@
-// 加载倾斜摄影方法
-const Cesium = window.Cesium;
-
 class ThreeDTilesLayerLoader {
+  /**
+   * 构造函数，初始化3D Tiles图层加载器。
+   * @param {string|string[]} urls - 倾斜摄影数据的URL或URL数组。
+   * @param {Cesium.Viewer} viewer - Cesium Viewer实例。
+   */
   constructor(urls, viewer) {
     this.urls = Array.isArray(urls) ? urls : [urls];
     this.viewer = viewer;
-    this.tilesets = []; // 用于存储加载的Cesium3DTileset实例
+    this.tilesets = [];
     this.visible = true; // 默认图层可见
   }
 
+  /**
+   * 异步加载3D Tiles图层，并在所有模型加载完成后根据visible状态控制显示。
+   */
   async load3DTilesLayers() {
-    for (const url of this.urls) {
+    const promises = this.urls.map(async (url) => {
       try {
-        const tileset = new Cesium.Cesium3DTileset({ url: url });
+        const tileset = await Cesium.Cesium3DTileset.fromUrl(url);
         this.viewer.scene.primitives.add(tileset);
         this.tilesets.push(tileset);
-        debugger;
-        // 监听加载完成事件，以便在加载后执行操作，如自动缩放
-        await tileset.readyPromise;
-        if (this.visible) {
-          this.viewer.zoomTo(tileset);
-        }
+        return tileset;
       } catch (error) {
-        console.error(`Failed to load 3D Tiles from ${url}:`, error);
+        console.error(`Failed to load 3D Tileset from ${url}:`, error);
       }
-    }
-  }
-
-  // 添加方法来控制图层的显隐
-  setVisible(flag) {
-    if (typeof flag !== "boolean") {
-      throw new Error("setVisible method expects a boolean argument.");
-    }
-    this.visible = flag;
-    this.tilesets.forEach((tileset) => {
-      tileset.show = flag;
     });
+
+    try {
+      await Promise.all(promises);
+      this.tilesets.forEach((tileset) => {
+        tileset.show = this.visible; // 在所有模型加载完毕后统一设置显示状态
+      });
+
+      if (this.visible && this.tilesets.length > 0) {
+        this.viewer.scene.globe.depthTestAgainstTerrain = true;
+        this.viewer.zoomTo(
+          this.tilesets[0],
+          new Cesium.HeadingPitchRange(
+            0.0,
+            -0.5,
+            this.tilesets[0].boundingSphere.radius * 2.0
+          )
+        );
+      }
+    } catch (error) {
+      console.error("Error loading some or all 3D Tilesets:", error);
+    }
   }
 }
+
 export default ThreeDTilesLayerLoader;

@@ -1,6 +1,4 @@
 // GeoJsonLayerLoader.js
-const Cesium = window.Cesium;
-
 class GeoJsonLayerLoader {
   constructor(urls, viewer) {
     this.urls = Array.isArray(urls) ? urls : [urls];

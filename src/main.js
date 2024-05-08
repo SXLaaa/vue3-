@@ -17,7 +17,7 @@ import storage from "./utils/storage";
 import store from "./store/index";
 import keyBoard from "./utils/common";
 import * as icons from "@element-plus/icons-vue";
-import * as Cesium from "cesium";
+// import * as Cesium from "cesium";
 // console.log("环境变量=>",import.meta.env)
 const app = createApp(App);
 // 全局指令
@@ -41,7 +41,7 @@ app.config.globalProperties.$request = request;
 app.config.globalProperties.$api = api;
 app.config.globalProperties.$storage = storage;
 app.config.globalProperties.$keyBoard = keyBoard;
-window.Cesium = Cesium;
+// window.Cesium = Cesium;
 // 注册全局图标
 for (let [key, component] of Object.entries(icons)) {
   app.component(key, component);

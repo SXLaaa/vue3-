@@ -1,6 +1,4 @@
 // TianDiTuLayer.js
-const Cesium = window.Cesium;
-
 class TianDiTuLayerLoader {
   constructor(urls, viewer, tk) {
     this.urls = Array.isArray(urls) ? urls : [urls, urls];

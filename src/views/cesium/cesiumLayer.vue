@@ -23,7 +23,6 @@ import { ref, onMounted } from "vue";
 import DataSource from "@/components/DataSource/DataSource.vue";
 import BaseMapSwitcher from "@/components/BaseMapSwitcher/BaseMapSwitcher.vue";
 import { useStore } from "vuex";
-import * as Cesium from "cesium";
 import { ininCoordinates } from "@/utils/ConfigFile.js"; // 引入全局白名单
 
 export default {

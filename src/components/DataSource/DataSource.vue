@@ -112,8 +112,7 @@ export default {
           {
             layerCode: "37005_sd",
             title: "3Dtiles",
-            layerUrl:
-              "http://earthsdk.com/v/last/Apps/assets/dayanta/tileset.json",
+            layerUrl: "http://localhost:3031/json/tileset.json",
             layerName: "3dtile测试",
             platForm: "model",
             layerType: "3dTiles",
