@@ -13,15 +13,16 @@
       <DataSource></DataSource>
     </div>
     <BaseMapSwitcher :cesiumViewer="viewer"></BaseMapSwitcher>
-
+    <MapOperation :groupedButtons="groupedFunctionButtons" />
     <div id="cesiumContainer"></div>
   </div>
 </template>
 
 <script>
-import { ref, onMounted } from "vue";
+import { ref, reactive, onMounted } from "vue";
 import DataSource from "@/components/DataSource/DataSource.vue";
 import BaseMapSwitcher from "@/components/BaseMapSwitcher/BaseMapSwitcher.vue";
+import MapOperation from "@/components/MapOperation/MapOperation.vue";
 import { useStore } from "vuex";
 import { ininCoordinates } from "@/utils/ConfigFile.js"; // 引入全局白名单
 
@@ -30,11 +31,31 @@ export default {
   components: {
     DataSource,
     BaseMapSwitcher,
+    MapOperation,
   },
   setup() {
     const viewer = ref(null);
     const isMenuOpen = ref(true); // 默认设置为展开状态
     const store = useStore();
+    const groupedFunctionButtons = reactive([
+      {
+        title: "大类1",
+        buttons: [
+          { label: "按钮1", action: () => alert("大类1的按钮1被点击了") },
+        ],
+        isOpen: false,
+      },
+      {
+        title: "大类2",
+        buttons: [
+          {
+            label: "按钮A",
+            action: () => console.log("大类2的按钮A被点击了"),
+          },
+        ],
+        isOpen: false,
+      },
+    ]);
     onMounted(async () => {
       const container = document.getElementById("cesiumContainer");
       if (container) {
@@ -90,6 +111,7 @@ export default {
       viewer,
       isMenuOpen,
       toggleMenu,
+      groupedFunctionButtons,
     };
   },
 };
