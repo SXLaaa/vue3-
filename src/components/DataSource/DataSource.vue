@@ -65,7 +65,7 @@ export default {
         icon: "el-icon-folder",
         resources: [
           {
-            layerCode: "37000_sd",
+            id: "37000_sd",
             title: "Geojson",
             layerUrl:
               "https://geo.datav.aliyun.com/areas_v3/bound/geojson?code=370000_full",
@@ -76,7 +76,7 @@ export default {
             tk: "",
           },
           {
-            layerCode: "37001_kml",
+            id: "37001_kml",
             title: "KML",
             layerUrl:
               "https://geo.datav.aliyun.com/areas_v3/bound/geojson?code=370009_full",
@@ -93,7 +93,7 @@ export default {
         icon: "el-icon-folder",
         resources: [
           {
-            layerCode: "37004_sd",
+            id: "37004_sd",
             title: "影像",
             layerUrl:
               "https://t{s}.tianditu.gov.cn/img_w/wmts?service=WMTS&request=GetTile&version=1.0.0&tileMatrixSet=w&TileMatrix={TileMatrix}&TileRow={TileRow}&TileCol={TileCol}&layer=img",
@@ -110,7 +110,7 @@ export default {
         icon: "el-icon-folder",
         resources: [
           {
-            layerCode: "37005_sd",
+            id: "37005_sd",
             title: "海岛",
             layerUrl: "http://localhost:3031/landTiles/tileset_whole.json",
             layerName: "海岛",
@@ -120,7 +120,7 @@ export default {
             ifAdjust: true, // 是否需要调整位置
           },
           {
-            layerCode: "37006_sd",
+            id: "37006_sd",
             title: "建筑",
             layerUrl: "http://localhost:3031/houseTiles/tileset.json",
             layerName: "建筑",

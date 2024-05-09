@@ -44,7 +44,7 @@ const foldersBasemap = reactive([
     icon: "el-icon-folder",
     resources: [
       {
-        layerCode: "37003_sd",
+        id: "37003_sd",
         title: "矢量",
         layerUrl: [
           "https://t{s}.tianditu.gov.cn/vec_w/wmts?service=WMTS&request=GetTile&version=1.0.0&tileMatrixSet=w&TileMatrix={TileMatrix}&TileRow={TileRow}&TileCol={TileCol}&layer=vec",
@@ -57,7 +57,7 @@ const foldersBasemap = reactive([
         tk: "b7d87c30876f4af87ccd40c1abac5634",
       },
       {
-        layerCode: "37004_sd",
+        id: "37004_sd",
         title: "影像",
         layerUrl: [
           "https://t{s}.tianditu.gov.cn/img_w/wmts?service=WMTS&request=GetTile&version=1.0.0&tileMatrixSet=w&TileMatrix={TileMatrix}&TileRow={TileRow}&TileCol={TileCol}&layer=img",

@@ -25,6 +25,7 @@ import BaseMapSwitcher from "@/components/BaseMapSwitcher/BaseMapSwitcher.vue";
 import MapOperation from "@/components/MapOperation/MapOperation.vue";
 import { useStore } from "vuex";
 import { ininCoordinates } from "@/utils/ConfigFile.js"; // 引入全局白名单
+import CesiumGeoOperations from "@/utils/CesiumGeoOperations.js"; // 引入全局白名单
 
 export default {
   name: "CesiumLayer",
@@ -39,20 +40,62 @@ export default {
     const store = useStore();
     const groupedFunctionButtons = reactive([
       {
-        title: "大类1",
-        buttons: [
-          { label: "按钮1", action: () => alert("大类1的按钮1被点击了") },
+        title: "基础操作",
+        resources: [
+          {
+            id: "draw-1",
+            label: "绘制点",
+            platForm: "draw",
+            drawType: "point",
+            layerUrl: "",
+            layerType: "",
+            tk: "",
+            ifAdjust: false,
+          },
+          {
+            id: "draw-11",
+            label: "绘制点billboard",
+            platForm: "draw",
+            drawType: "billboard",
+            layerUrl: "",
+            layerType: "",
+            tk: "",
+            ifAdjust: false,
+          },
+          {
+            id: "draw-2",
+            label: "绘制线",
+            platForm: "draw",
+            drawType: "line",
+            layerUrl: "",
+            layerType: "",
+            tk: "",
+            ifAdjust: false,
+          },
+          {
+            id: "draw-3",
+            label: "绘制面",
+            platForm: "draw",
+            drawType: "polygon",
+            layerUrl: "",
+            layerType: "",
+            tk: "",
+            ifAdjust: false,
+          },
         ],
+        des: "这种主要考查对cesium中事件的控制  以及callbackProperty的使用",
+        backgroundColor: "rgba(96, 172, 94, 0.9)",
         isOpen: false,
       },
       {
         title: "大类2",
-        buttons: [
+        resources: [
           {
             label: "按钮A",
-            action: () => console.log("大类2的按钮A被点击了"),
           },
         ],
+        des: "这种主要考查对cesium中事件的控制  以及callbackProperty的使用",
+        backgroundColor: " rgba(108, 126, 185, 0.7)",
         isOpen: false,
       },
     ]);
@@ -72,7 +115,6 @@ export default {
         });
         try {
           configureCesium(viewer.value);
-          window.cesiumViewer = viewer.value;
           store.commit("setViewer", viewer.value);
         } catch (error) {
           console.error("Cesium configuration failed:", error);
@@ -106,7 +148,6 @@ export default {
     const toggleMenu = () => {
       isMenuOpen.value = !isMenuOpen.value;
     };
-
     return {
       viewer,
       isMenuOpen,

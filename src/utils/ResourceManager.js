@@ -2,6 +2,7 @@
 import TianDiTuLayerLoader from "./TianDiTuLayer";
 import GeoJsonLayerLoader from "./GeoJsonLayerLoader";
 import ThreeDTilesLayerLoader from "./ThreeDTilesLayerLoader";
+import CesiumGeoOperations from "./CesiumGeoOperations";
 
 class ResourceManager {
   constructor(componentId, resourcesDirectory, cesiumViewer) {
@@ -10,8 +11,9 @@ class ResourceManager {
     this.resourceMap = new Map();
     resourcesDirectory.forEach((folder) => {
       folder.resources.forEach((resourceData) => {
-        let { platForm, layerUrl, layerType, tk, ifAdjust } = resourceData;
-        const key = `${this.componentId}_${resourceData.layerCode}`;
+        let { platForm, layerUrl, layerType, drawType, tk, ifAdjust } =
+          resourceData;
+        const key = `${this.componentId}_${resourceData.id}`;
         let layerLoader;
 
         if (platForm === "tianditu") {
@@ -24,6 +26,9 @@ class ResourceManager {
             layerUrl,
             ifAdjust
           );
+          // 绘制
+        } else if (platForm === "draw") {
+          layerLoader = new CesiumGeoOperations(cesiumViewer, drawType);
         } else {
           console.warn(
             `Unsupported platform or layer layerType: ${platForm}, ${layerType}`
@@ -37,19 +42,20 @@ class ResourceManager {
   }
 
   updateResourceVisibility(resource) {
-    if (!resource.layerCode || !resource.layerType || !resource.layerUrl) {
-      console.error("无layerCode || 无layerType || 无layerUrl");
+    if (
+      (!resource.id || !resource.layerType || !resource.layerUrl) &&
+      resource.platForm !== "draw"
+    ) {
+      console.error("无id || 无layerType || 无layerUrl");
       return;
     } else {
       console.info("调用了updateResourceVisibility");
     }
 
-    const key = `${this.componentId}_${resource.layerCode}`;
+    const key = `${this.componentId}_${resource.id}`;
     const layerLoader = this.resourceMap.get(key);
     if (!layerLoader) {
-      console.error(
-        `Resource with layerCode "${resource.layerCode}" not found in the resource map.`
-      );
+      console.error(` this.resourceMap没注册${resource.id}`);
       return;
     }
     // 直接设置visible属性，因为具体的加载逻辑现在由各自的Loader类管理
@@ -61,6 +67,8 @@ class ResourceManager {
       layerLoader.loadGeoJsonLayer();
     } else if (layerLoader instanceof ThreeDTilesLayerLoader) {
       layerLoader.load3DTilesLayers();
+    } else if (layerLoader instanceof CesiumGeoOperations) {
+      layerLoader.drawMethod();
     }
   }
 }
