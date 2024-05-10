@@ -21,6 +21,7 @@
               v-for="(resource, buttonIndex) in group.resources"
               :key="`${index}-${buttonIndex}`"
               @click="handleButtonClick(resource)"
+              :title="resource.des"
             >
               {{ resource.label }}
             </el-dropdown-item>

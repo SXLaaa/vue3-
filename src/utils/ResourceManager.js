@@ -1,8 +1,8 @@
 // ResourceManager.js
-import TianDiTuLayerLoader from "./TianDiTuLayer";
-import GeoJsonLayerLoader from "./GeoJsonLayerLoader";
-import ThreeDTilesLayerLoader from "./ThreeDTilesLayerLoader";
-import CesiumGeoOperations from "./CesiumGeoOperations";
+import TianDiTuLayerLoader from "./Cesium/Layer/TianDiTuLayer";
+import GeoJsonLayerLoader from "./Cesium/Layer/GeoJsonLayerLoader";
+import ThreeDTilesLayerLoader from "./Cesium/Layer/ThreeDTilesLayerLoader";
+import CesiumGeoOperations from "./Cesium/Draw/CesiumGeoOperations";
 
 class ResourceManager {
   constructor(componentId, resourcesDirectory, cesiumViewer) {
@@ -68,7 +68,7 @@ class ResourceManager {
     } else if (layerLoader instanceof ThreeDTilesLayerLoader) {
       layerLoader.load3DTilesLayers();
     } else if (layerLoader instanceof CesiumGeoOperations) {
-      layerLoader.drawMethod();
+      // layerLoader.drawMethod();
     }
   }
 }

@@ -25,7 +25,6 @@ import BaseMapSwitcher from "@/components/BaseMapSwitcher/BaseMapSwitcher.vue";
 import MapOperation from "@/components/MapOperation/MapOperation.vue";
 import { useStore } from "vuex";
 import { ininCoordinates } from "@/utils/ConfigFile.js"; // 引入全局白名单
-import CesiumGeoOperations from "@/utils/CesiumGeoOperations.js"; // 引入全局白名单
 
 export default {
   name: "CesiumLayer",
@@ -61,6 +60,7 @@ export default {
             layerType: "",
             tk: "",
             ifAdjust: false,
+            des: `pick方法用于从给定的屏幕坐标（通常是鼠标点击位置）拾取场景中的第一个可见图形元素（如实体、地形、3D Tiles特性等;\npickPosition方法则更专注于将屏幕坐标转换为地球表面的实际三维坐标（世界坐标系中的位置），主要用于获取地形或3D Tiles的表面位置`,
           },
           {
             id: "draw-2",
@@ -112,6 +112,7 @@ export default {
           navigationHelpButton: false, // 是否显示右上角的帮助按钮
           baseLayerPicker: false, // 是否显示图层选择器
           imageryProvider: false, // cesium默认图层
+          selectionIndicator: false, // 实体选中聚焦框
         });
         try {
           configureCesium(viewer.value);
