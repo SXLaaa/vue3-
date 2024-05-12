@@ -2,7 +2,6 @@
 import TianDiTuLayerLoader from "./Cesium/Layer/TianDiTuLayer";
 import GeoJsonLayerLoader from "./Cesium/Layer/GeoJsonLayerLoader";
 import ThreeDTilesLayerLoader from "./Cesium/Layer/ThreeDTilesLayerLoader";
-import CesiumGeoOperations from "./Cesium/Draw/CesiumGeoOperations";
 
 class ResourceManager {
   constructor(componentId, resourcesDirectory, cesiumViewer) {
@@ -26,9 +25,6 @@ class ResourceManager {
             layerUrl,
             ifAdjust
           );
-          // 绘制
-        } else if (platForm === "draw") {
-          layerLoader = new CesiumGeoOperations(cesiumViewer, drawType);
         } else {
           console.warn(
             `Unsupported platform or layer layerType: ${platForm}, ${layerType}`
@@ -67,8 +63,6 @@ class ResourceManager {
       layerLoader.loadGeoJsonLayer();
     } else if (layerLoader instanceof ThreeDTilesLayerLoader) {
       layerLoader.load3DTilesLayers();
-    } else if (layerLoader instanceof CesiumGeoOperations) {
-      // layerLoader.drawMethod();
     }
   }
 }

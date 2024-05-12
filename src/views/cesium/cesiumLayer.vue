@@ -13,7 +13,10 @@
       <DataSource></DataSource>
     </div>
     <BaseMapSwitcher :cesiumViewer="viewer"></BaseMapSwitcher>
-    <MapOperation :groupedButtons="groupedFunctionButtons" />
+    <MapOperation
+      :cesiumViewer="viewer"
+      :groupedButtons="groupedFunctionButtons"
+    />
     <div id="cesiumContainer"></div>
   </div>
 </template>
@@ -116,7 +119,6 @@ export default {
         });
         try {
           configureCesium(viewer.value);
-          store.commit("setViewer", viewer.value);
         } catch (error) {
           console.error("Cesium configuration failed:", error);
         }
@@ -145,6 +147,8 @@ export default {
           roll: initialOrientation.roll,
         },
       });
+      store.commit("setViewer", viewer);
+      Window.viewer = viewer;
     };
     const toggleMenu = () => {
       isMenuOpen.value = !isMenuOpen.value;

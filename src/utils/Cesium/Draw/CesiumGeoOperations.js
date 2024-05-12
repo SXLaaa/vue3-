@@ -6,65 +6,71 @@
  * 面
  * */
 import { jinan, qingdao } from "@/utils/ConfigFile.js"; // 引入全局白名单
-import EntityClick from "./EntityClick";
+import EntityClick from "./EntityClick"; // 待使用
 import billboardImage from "@/assets/images/广告牌识别.png";
 class CesiumGeoOperations {
-  constructor(viewer, drawType) {
+  constructor(viewer) {
     this.viewer = viewer;
-    this.drawType = drawType;
     // 添加点击事件监听
+    // 重要！！！！！！！！！
+    this.viewer.scene.globe.depthTestAgainstTerrain = true; // 场景中的几何体（如点、线、面等）能够正确显示在地形之上或之下
     this.handler = new Cesium.ScreenSpaceEventHandler(this.viewer.canvas);
+    this.setupClickHandler();
+  }
+  // 设置绘制类型
+  setDrawType(drawType) {
+    this.drawType = drawType;
+  }
+  // 设置底图监听回调事件
+  setupClickHandler() {
+    this.handler.setInputAction((movement) => {
+      // 使用 drillPick 获取所有可能的实体+判断是否有这个实体
+      const pickedEntities = this.viewer.scene.pick(movement.position);
+      if (Cesium.defined(pickedEntities) && pickedEntities.id) {
+        this.showDetailInfo();
+      } else {
+        this.onMapClick(movement);
+      }
+    }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
   }
   destroy() {
-    // 检查handler是否存在并且未被销毁
     if (this.handler) {
       this.handler.destroy();
       this.handler = undefined;
     }
   }
-  // 绘制-动态点击
+  showDetailInfo(detailInfo) {
+    alert("获取到实体了");
+  }
   onMapClick(movement) {
-    // const cartesian = this.viewer.scene.pickPosition(movement.position);
-    console.log(
-      "🚀 ~ file: CesiumGeoOperations.js:32 ~ CesiumGeoOperations ~ onMapClick ~ this.viewer.scene:",
-      this.viewer.scene
-    );
+    const cartesian = this.viewer.scene.pickPosition(movement.position);
     if (cartesian) {
       const cartographic = Cesium.Cartographic.fromCartesian(cartesian);
       const longitude = Cesium.Math.toDegrees(cartographic.longitude);
       const latitude = Cesium.Math.toDegrees(cartographic.latitude);
-      // 根据drawType执行相应的绘制操作
-      switch (this.drawType) {
-        case "point":
-          this.addPoint(longitude, latitude);
-          break;
-        case "billboard":
-          this.addPointWithBillboardAndLabel(longitude, latitude);
-          break;
-        case "line":
-          break;
-        case "polygon":
-          break;
-        default:
-          console.log("未定义的绘制类型");
-      }
+      this.drawMethod(longitude, latitude);
     }
   }
+
   // 绘制-静态直接绘制
-  // drawMethod() {
-  //   switch (this.drawType) {
-  //     case "point":
-  //       this.addPoint(...jinan);
-  //       break;
-  //     case "billboard":
-  //       this.addPointWithBillboardAndLabel(...qingdao);
-  //       break;
-  //     case "line":
-  //       break;
-  //     case "polygon":
-  //       break;
-  //   }
-  // }
+  drawMethod(longitude, latitude) {
+    switch (this.drawType) {
+      case "point":
+        longitude && latitude ? this.addPoint(longitude, latitude) : "";
+        // this.addPoint(...jinan);
+        break;
+      case "billboard":
+        longitude && latitude
+          ? this.addPointWithBillboardAndLabel(longitude, latitude)
+          : "";
+        // this.addPointWithBillboardAndLabel(...qingdao);
+        break;
+      case "line":
+        break;
+      case "polygon":
+        break;
+    }
+  }
   //绘制点
   addPoint(longitude, latitude, options = {}) {
     if (!this.viewer || !this.viewer.entities) {
@@ -75,6 +81,8 @@ class CesiumGeoOperations {
       color: Cesium.Color.RED, // 颜色
       outlineColor: Cesium.Color.WHITE, // 轮廓颜色
       outlineWidth: 2, // 轮廓宽度
+      // 重要！！！！！！！！！
+      disableDepthTestDistance: Number.POSITIVE_INFINITY, // 深度测试失效的距离。当设置为 Number.POSITIVE_INFINITY 时，意味着深度测试永远不会失效，即无论距离相机多远，该图形都会始终进行深度测试
     };
     const mergedOptions = { ...defaultOptions, ...options };
     const position = Cesium.Cartesian3.fromDegrees(longitude, latitude);
@@ -84,6 +92,10 @@ class CesiumGeoOperations {
       point: mergedOptions,
     });
     this.viewer.zoomTo(pointEntity);
+    console.log(
+      "🚀 ~ file: CesiumGeoOperations.js:75 ~ CesiumGeoOperations ~ addPoint ~ this.viewer.entities:",
+      this.viewer.entities
+    );
   }
   //绘制图标和label
   addPointWithBillboardAndLabel(

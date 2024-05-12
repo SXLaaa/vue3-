@@ -20,7 +20,7 @@
             <el-dropdown-item
               v-for="(resource, buttonIndex) in group.resources"
               :key="`${index}-${buttonIndex}`"
-              @click="handleButtonClick(resource)"
+              @click.stop="handleButtonClick(resource)"
               :title="resource.des"
             >
               {{ resource.label }}
@@ -32,9 +32,9 @@
   </div>
 </template>
 <script>
-import { ref, onMounted, computed } from "vue";
-import { useStore } from "vuex";
-import ResourceManager from "@/utils/ResourceManager.js";
+import { ref, onMounted, watch } from "vue";
+import CesiumGeoOperations from "@/utils/Cesium/Draw/CesiumGeoOperations";
+
 export default {
   name: "MapOperation",
   props: {
@@ -54,22 +54,37 @@ export default {
         );
       },
     },
+    cesiumViewer: {
+      type: Object,
+      required: true,
+      default: () => null,
+    },
   },
   setup(props) {
     const resourceManagerCall = ref(null);
-    const store = useStore();
-    const cesiumViewer = computed(() => store.state.cesiumViewer);
-    onMounted(() => {
-      resourceManagerCall.value = new ResourceManager(
-        "MapOperation",
-        props.groupedButtons,
-        cesiumViewer
-      );
-    });
+    watch(
+      () => props.cesiumViewer,
+      (newVal, oldVal) => {
+        if (newVal && !oldVal) {
+          initializeResourceManager();
+        }
+      },
+      { immediate: true }
+    );
+    onMounted(() => {});
+    // viewer初始化成功挂载
+    const initializeResourceManager = () => {
+      resourceManagerCall.value = new CesiumGeoOperations(props.cesiumViewer);
+    };
     const handleButtonClick = (resource) => {
-      resourceManagerCall.value.updateResourceVisibility(resource);
+      props.cesiumViewer.entities.removeAll(); // 绘制前，先清除所有的
+      // viewer.entities.removeById(entityId); // 根据Id
+      // viewer.entities.remove(entityObject); // 根据实体
+      resourceManagerCall.value.setDrawType(resource.drawType);
     };
     return {
+      resourceManagerCall,
+      initializeResourceManager,
       handleButtonClick,
     };
   },
