@@ -69,7 +69,7 @@ export default {
             id: "draw-2",
             label: "绘制线",
             platForm: "draw",
-            drawType: "line",
+            drawType: "polyline",
             layerUrl: "",
             layerType: "",
             tk: "",

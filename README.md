@@ -2,6 +2,8 @@
 
 vue3+elementPlus+Koa2
 node v18.19.0
+npm 10.2.3
+yarn 1.22.19
 
 # 安装依赖
 
