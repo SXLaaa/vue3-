@@ -15,9 +15,10 @@
         :popper-append-to-body="true"
       >
         <template #title>
-          <span>
-            <el-icon><Operation /></el-icon>{{ folder.title }}</span
-          >
+          <div>
+            <el-icon><Operation /></el-icon>
+            <span>{{ folder.title }}</span>
+          </div>
         </template>
 
         <el-menu-item
@@ -31,6 +32,7 @@
           style="display: flex; align-items: center"
         >
           <div
+            :title="resource.des"
             :class="{
               'resource-title': true,
               'resource-title-active': resource.visible,
@@ -81,10 +83,11 @@ export default {
             layerUrl:
               "https://geo.datav.aliyun.com/areas_v3/bound/geojson?code=370009_full",
             layerName: "",
-            platForm: "dataV",
+            platForm: "kml",
             layerType: "kml",
             visible: false,
             tk: "",
+            des: "基于xml的标记语言",
           },
         ],
       },
@@ -112,21 +115,85 @@ export default {
           {
             id: "37005_sd",
             title: "海岛",
-            layerUrl: "http://localhost:3031/landTiles/tileset_whole.json",
+            layerUrl:
+              "http://localhost:8089/modelData/landTiles/tileset_whole.json",
             layerName: "海岛",
             platForm: "model",
             layerType: "3dTiles",
             visible: false,
             ifAdjust: true, // 是否需要调整位置
+            des: "数据来源：D:\apache-tomcat-8.5.82\webapps\modelData",
           },
           {
             id: "37006_sd",
             title: "建筑",
-            layerUrl: "http://localhost:3031/houseTiles/tileset.json",
+            layerUrl: "http://localhost:8089/modelData/houseTiles/tileset.json",
             layerName: "建筑",
             platForm: "model",
             layerType: "3dTiles",
             visible: false,
+            des: "数据来源：D:\apache-tomcat-8.5.82\webapps\modelData",
+          },
+        ],
+      },
+      {
+        title: "OGC",
+        icon: "el-icon-folder",
+        resources: [
+          {
+            id: "37007_sd",
+            title: "济南wms服务",
+            layerUrl: "http://localhost:8089/geoserver/cite/wms",
+            layerName: "cite:jinan",
+            platForm: "ogc",
+            layerType: "wms",
+            visible: false,
+            ifAdjust: true, // 是否需要调整位置
+            des: "数据来源：D:\Gis数据",
+          },
+          {
+            id: "37008_sd",
+            title: "蓬莱水城wms",
+            layerUrl: "http://localhost:8089/geoserver/cite/wms",
+            layerName: "cite:penglaiwater",
+            platForm: "ogc",
+            layerType: "wms",
+            visible: false,
+            des: "数据来源：D:\Gis数据",
+          },
+          {
+            id: "37009_sd",
+            title: "济南wmts4326",
+            layerUrl:
+              "http://localhost:8089/geoserver/gwc/service/wmts/rest/jinan:jinan4326/{style}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}?format=image/png",
+            layerName: "jinan:jinan4326",
+            platForm: "ogc",
+            layerType: "wmts",
+            visible: false,
+            des: "数据来源D:\Gis数据",
+          },
+          {
+            id: "37008_sd",
+            title: "济南wmts3857",
+            layerUrl:
+              "http://localhost:8089/geoserver/gwc/service/wmts/rest/jinan:jinan3857/{style}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}?format=image/png",
+            layerName: "jinan:jinan3857",
+            platForm: "ogc",
+            layerType: "wmts",
+            visible: false,
+            des: "数据来源：D:\Gis数据",
+          },
+          {
+            id: "37009_sd",
+            title: "青岛WFS行政区划",
+            layerUrl: "http://localhost:8089/geoserver/qingdao/ows",
+            // layerUrl:
+            //   "http://localhost:8089/geoserver/qingdao/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=qingdao%3A370200-polygon&maxFeatures=50",
+            layerName: "qingdao:370200-polygon",
+            platForm: "ogc",
+            layerType: "wfs",
+            visible: false,
+            des: "数据来源：D:\Gis数据",
           },
         ],
       },

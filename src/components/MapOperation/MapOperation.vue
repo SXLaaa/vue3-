@@ -83,19 +83,23 @@ export default {
       (newVal, oldVal) => {
         if (newVal && !oldVal) {
           viewer = newVal;
-          // initializeResourceManager();
-          // startDraw();
+          resourceManagerCall.value = new CesiumGeoOperations(
+            props.cesiumViewer
+          );
         }
       },
       { immediate: true }
     );
-    const initializeResourceManager = () => {
-      resourceManagerCall.value = new CesiumGeoOperations(props.cesiumViewer);
-    };
     const handleButtonClick = (resource) => {
       drawType = resource.drawType;
-      startDraw();
-      // resourceManagerCall.value.setDrawType(resource.drawType);
+      if (
+        resourceManagerCall.value &&
+        ["point", "billboard"].includes(drawType)
+      ) {
+        resourceManagerCall.value.setDrawType(drawType);
+      } else {
+        startDraw();
+      }
     };
     // 监听事件
     const startDraw = () => {
