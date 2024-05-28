@@ -27,9 +27,17 @@ const routes = [
         name: "cesiumLayer",
         path: "/three/cesium/cesiumLayer",
         meta: {
-          title: "登录",
+          title: "三维一张图(cesium)",
         },
         component: () => import("@/views/Cesium/cesiumLayer.vue"),
+      },
+      {
+        name: "cesiumLayer",
+        path: "/three/cesium/cesiumLayer",
+        meta: {
+          title: "三维一张图(mapBox)",
+        },
+        component: () => import("@/views/MapBox/MapBox.vue"),
       },
     ],
   },
@@ -61,7 +69,7 @@ async function loadAsyncRoutes() {
   if (userInfo.token) {
     try {
       const { menuList } = await API.getPermissionList();
-      console.log(menuList, '---menuList')
+      console.log(menuList, "---menuList");
 
       let routes = utils.generateRoute(menuList);
       const modules = import.meta.glob("../views/*.vue"); // view下第一层级vue文件
@@ -77,7 +85,7 @@ async function loadAsyncRoutes() {
         route.component = concatModules[url];
         router.addRoute("home", route);
       });
-    } catch (error) { }
+    } catch (error) {}
   }
 }
 loadAsyncRoutes();
@@ -94,7 +102,7 @@ function checkPermission(path) {
 */
 // 导航守卫
 // 假设我们有以下白名单路由名称或路径
-const whiteList = ['/login', '/cesium/cesiumLayer'];
+const whiteList = ["/login", "/cesium/cesiumLayer"];
 
 router.beforeEach(async (to, from, next) => {
   if (ROUTE_WHITELIST.includes(to.path)) {

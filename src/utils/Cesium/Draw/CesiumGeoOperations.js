@@ -28,14 +28,10 @@ class CesiumGeoOperations {
     handler.setInputAction((movement) => {
       // 使用 drillPick 获取所有可能的实体+判断是否有这个实体
       const pickedEntities = viewer.scene.pick(movement.position);
-      if (
-        Cesium.defined(pickedEntities) &&
-        pickedEntities.id &&
-        drawType !== "line"
-      ) {
+      if (Cesium.defined(pickedEntities) && pickedEntities.id) {
         this.showDetailInfo();
       }
-      drawType !== "line" ? this.onMapClick(movement) : "";
+      this.onMapClick(movement);
     }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
   }
   destroy() {

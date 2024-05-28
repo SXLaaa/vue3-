@@ -173,7 +173,7 @@ export default {
             des: "数据来源D:\Gis数据",
           },
           {
-            id: "37008_sd",
+            id: "370010_sd",
             title: "济南wmts3857",
             layerUrl:
               "http://localhost:8089/geoserver/gwc/service/wmts/rest/jinan:jinan3857/{style}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}?format=image/png",
@@ -184,7 +184,7 @@ export default {
             des: "数据来源：D:\Gis数据",
           },
           {
-            id: "37009_sd",
+            id: "370011_sd",
             title: "青岛WFS行政区划",
             layerUrl: "http://localhost:8089/geoserver/qingdao/ows",
             // layerUrl:
