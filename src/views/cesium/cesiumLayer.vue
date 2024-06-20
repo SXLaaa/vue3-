@@ -16,6 +16,8 @@
     <MapOperation
       :cesiumViewer="viewer"
       :groupedButtons="groupedFunctionButtons"
+      @call-parent-method="handleMessageFromChild"
+      :parent-method="handleMessageFromChild"
     />
     <div id="cesiumContainer"></div>
   </div>
@@ -23,9 +25,9 @@
 
 <script>
 import { ref, reactive, onMounted } from "vue";
-import DataSource from "@/components/DataSource/DataSource.vue";
-import BaseMapSwitcher from "@/components/BaseMapSwitcher/BaseMapSwitcher.vue";
-import MapOperation from "@/components/MapOperation/MapOperation.vue";
+import DataSource from "@/components/DataSource/DataSource.vue"; // 资源目录
+import BaseMapSwitcher from "@/components/BaseMapSwitcher/BaseMapSwitcher.vue"; // 地图开关
+import MapOperation from "@/components/MapOperation/MapOperation.vue"; // 地图操作
 import { useStore } from "vuex";
 import { ininCoordinates } from "@/utils/ConfigFile.js"; // 引入全局白名单
 
@@ -91,13 +93,30 @@ export default {
         isOpen: false,
       },
       {
-        title: "大类2",
+        title: "绘制操作",
         resources: [
           {
-            label: "按钮A",
+            id: "screen-1",
+            label: "分屏对比",
+            platForm: "screen",
+            drawType: "compare",
+            layerUrl: "",
+            layerType: "",
+            tk: "",
+            ifAdjust: false,
+          },
+          {
+            id: "screen-2",
+            label: "卷帘对比",
+            platForm: "screen",
+            drawType: "roller",
+            layerUrl: "",
+            layerType: "",
+            tk: "",
+            ifAdjust: false,
           },
         ],
-        des: "这种主要考查对cesium中事件的控制  以及callbackProperty的使用",
+        des: "",
         backgroundColor: " rgba(108, 126, 185, 0.7)",
         isOpen: false,
       },
@@ -153,11 +172,15 @@ export default {
     const toggleMenu = () => {
       isMenuOpen.value = !isMenuOpen.value;
     };
+    const handleMessageFromChild = (DataSource) => {
+      console.log(DataSource, "0-0-=0-=00-");
+    };
     return {
       viewer,
       isMenuOpen,
       toggleMenu,
       groupedFunctionButtons,
+      handleMessageFromChild,
     };
   },
 };

@@ -1,4 +1,8 @@
-export const ROUTE_WHITELIST = ["/login", "/three/cesium/cesiumLayer"];
+export const ROUTE_WHITELIST = [
+  "/login",
+  "/three/cesium/cesiumLayer",
+  "/three/cesium/MapBoxLayer",
+];
 export const ininCoordinates = {
   longitude: 117.0, // 替换为具体的目标经纬度
   latitude: 36.0,

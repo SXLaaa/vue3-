@@ -32,8 +32,8 @@ const routes = [
         component: () => import("@/views/Cesium/cesiumLayer.vue"),
       },
       {
-        name: "cesiumLayer",
-        path: "/three/cesium/cesiumLayer",
+        name: "MapBoxLayer",
+        path: "/three/cesium/MapBoxLayer",
         meta: {
           title: "三维一张图(mapBox)",
         },
@@ -102,7 +102,7 @@ function checkPermission(path) {
 */
 // 导航守卫
 // 假设我们有以下白名单路由名称或路径
-const whiteList = ["/login", "/cesium/cesiumLayer"];
+const whiteList = ["/login", "/cesium/cesiumLayer", "/cesium/MapBoxLayer"];
 
 router.beforeEach(async (to, from, next) => {
   if (ROUTE_WHITELIST.includes(to.path)) {

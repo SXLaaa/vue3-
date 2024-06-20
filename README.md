@@ -16,6 +16,7 @@ npm run dev
 # 白名单访问三维
 
 http://localhost:8080/#/three/cesium/cesiumLayer
+http://localhost:8080/#/three/cesium/MapBoxLayer
 
 ### 代码快捷操作
 

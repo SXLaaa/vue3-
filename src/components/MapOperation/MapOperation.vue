@@ -39,7 +39,7 @@
   </div>
 </template>
 <script>
-import { ref, onMounted, watch, reactive, toRefs } from "vue";
+import { ref, onMounted, watch, reactive, toRefs, defineEmits } from "vue";
 import CesiumGeoOperations from "@/utils/Cesium/Draw/CesiumGeoOperations";
 import turf from "turf";
 export default {
@@ -66,8 +66,9 @@ export default {
       required: true,
       default: () => null,
     },
+    parentMethod: Function,
   },
-  setup(props) {
+  setup(props, context) {
     // 绘制线操作
     const resourceManagerCall = ref(null);
     let handler = null;
@@ -78,6 +79,7 @@ export default {
     let computeLine = []; // 计算线长度的点-w84
     let drawedShapes = []; // 绘制面形成的图形
     let drawType = "";
+    let platForm = "";
     watch(
       () => props.cesiumViewer,
       (newVal, oldVal) => {
@@ -90,15 +92,34 @@ export default {
       },
       { immediate: true }
     );
+    // 使用 context.emit 而不是 callParentMethod
+    const emitCallParentMethod = (resource) => {
+      context.emit("call-parent-method", resource);
+    };
+    const emit = defineEmits(["call-parent-method"]);
+    const callParentMethod = (resource) => {
+      emit("call-parent-method", resource);
+    };
     const handleButtonClick = (resource) => {
+      platForm = resource.platForm;
       drawType = resource.drawType;
-      if (
-        resourceManagerCall.value &&
-        ["point", "billboard"].includes(drawType)
-      ) {
-        resourceManagerCall.value.setDrawType(drawType);
-      } else {
-        startDraw();
+      // 点线面绘制
+      if (platForm == "draw") {
+        if (
+          resourceManagerCall.value &&
+          ["point", "billboard"].includes(drawType)
+        ) {
+          resourceManagerCall.value.setDrawType(drawType);
+        } else {
+          startDraw();
+        }
+        // 分屏对比
+      } else if (platForm == "screen") {
+        if (["compare"].includes(drawType)) {
+          // emitCallParentMethod(resource); // 第一种
+          // callParentMethod(resource); // 第二种
+          props.parentMethod(resource); // 第三种
+        }
       }
     };
     // 监听事件
@@ -284,6 +305,8 @@ export default {
       Cartesian3_to_WGS84,
       drawShape,
       handleClear,
+      emitCallParentMethod,
+      emit,
     };
   },
 };
