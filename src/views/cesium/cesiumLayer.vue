@@ -9,17 +9,21 @@
         <component :is="isMenuOpen ? 'arrow-right' : 'arrow-left'" />
       </el-icon>
     </div>
+    <!-- 资源目录 -->
     <div class="left-menu-container" :class="{ collapsed: !isMenuOpen }">
       <DataSource></DataSource>
     </div>
+    <!-- 地图切换 -->
     <BaseMapSwitcher :cesiumViewer="viewer"></BaseMapSwitcher>
+    <!-- 地图操作 -->
     <MapOperation
       :cesiumViewer="viewer"
       :groupedButtons="groupedFunctionButtons"
       @call-parent-method="handleMessageFromChild"
       :parent-method="handleMessageFromChild"
     />
-    <div id="cesiumContainer"></div>
+    <!-- <div id="cesiumContainer"></div> -->
+    <SplitScreenCesium />
   </div>
 </template>
 
@@ -28,6 +32,8 @@ import { ref, reactive, onMounted } from "vue";
 import DataSource from "@/components/DataSource/DataSource.vue"; // 资源目录
 import BaseMapSwitcher from "@/components/BaseMapSwitcher/BaseMapSwitcher.vue"; // 地图开关
 import MapOperation from "@/components/MapOperation/MapOperation.vue"; // 地图操作
+import SplitScreenCesium from "@/components/SplitScreenCesium/SplitScreenCesium.vue"; // 地图操作
+
 import { useStore } from "vuex";
 import { ininCoordinates } from "@/utils/ConfigFile.js"; // 引入全局白名单
 
@@ -37,6 +43,7 @@ export default {
     DataSource,
     BaseMapSwitcher,
     MapOperation,
+    SplitScreenCesium,
   },
   setup() {
     const viewer = ref(null);
@@ -173,7 +180,7 @@ export default {
       isMenuOpen.value = !isMenuOpen.value;
     };
     const handleMessageFromChild = (DataSource) => {
-      console.log(DataSource, "0-0-=0-=00-");
+      console.log(DataSource, DataSource.label, "0-0-=0-=00-");
     };
     return {
       viewer,

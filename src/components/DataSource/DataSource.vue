@@ -122,7 +122,7 @@ export default {
             layerType: "3dTiles",
             visible: false,
             ifAdjust: true, // 是否需要调整位置
-            des: "数据来源：D:\apache-tomcat-8.5.82\webapps\modelData",
+            des: "数据来源：D:apache-tomcat-8.5.82webappsmodelData",
           },
           {
             id: "37006_sd",
@@ -132,7 +132,7 @@ export default {
             platForm: "model",
             layerType: "3dTiles",
             visible: false,
-            des: "数据来源：D:\apache-tomcat-8.5.82\webapps\modelData",
+            des: "数据来源：D:apache-tomcat-8.5.82webappsmodelData",
           },
         ],
       },
@@ -149,7 +149,7 @@ export default {
             layerType: "wms",
             visible: false,
             ifAdjust: true, // 是否需要调整位置
-            des: "数据来源：D:\Gis数据",
+            des: "数据来源：D:Gis数据",
           },
           {
             id: "37008_sd",
@@ -159,7 +159,7 @@ export default {
             platForm: "ogc",
             layerType: "wms",
             visible: false,
-            des: "数据来源：D:\Gis数据",
+            des: "数据来源：D:Gis数据",
           },
           {
             id: "37009_sd",
@@ -170,7 +170,7 @@ export default {
             platForm: "ogc",
             layerType: "wmts",
             visible: false,
-            des: "数据来源D:\Gis数据",
+            des: "数据来源D:Gis数据",
           },
           {
             id: "370010_sd",
@@ -181,7 +181,7 @@ export default {
             platForm: "ogc",
             layerType: "wmts",
             visible: false,
-            des: "数据来源：D:\Gis数据",
+            des: "数据来源：D:Gis数据",
           },
           {
             id: "370011_sd",
@@ -193,7 +193,7 @@ export default {
             platForm: "ogc",
             layerType: "wfs",
             visible: false,
-            des: "数据来源：D:\Gis数据",
+            des: "数据来源：D:Gis数据",
           },
         ],
       },

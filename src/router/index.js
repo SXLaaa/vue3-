@@ -1,3 +1,11 @@
+/*
+ * @Author: shixl shixl@dist.com.cn
+ * @Date: 2024-06-26 10:11:51
+ * @LastEditors: shixl shixl@dist.com.cn
+ * @LastEditTime: 2024-07-02 09:48:18
+ * @FilePath: /vue3-koa2-web/src/router/index.js
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
 import { createRouter, createWebHashHistory } from "vue-router";
 import Home from "@/components/Home.vue";
 import storage from "./../utils/storage";
@@ -32,8 +40,8 @@ const routes = [
         component: () => import("@/views/Cesium/cesiumLayer.vue"),
       },
       {
-        name: "MapBoxLayer",
-        path: "/three/cesium/MapBoxLayer",
+        name: "mapBoxLayer",
+        path: "/three/mapBox/mapBoxLayer",
         meta: {
           title: "三维一张图(mapBox)",
         },
@@ -85,7 +93,7 @@ async function loadAsyncRoutes() {
         route.component = concatModules[url];
         router.addRoute("home", route);
       });
-    } catch (error) {}
+    } catch (error) { }
   }
 }
 loadAsyncRoutes();
@@ -102,7 +110,6 @@ function checkPermission(path) {
 */
 // 导航守卫
 // 假设我们有以下白名单路由名称或路径
-const whiteList = ["/login", "/cesium/cesiumLayer", "/cesium/MapBoxLayer"];
 
 router.beforeEach(async (to, from, next) => {
   if (ROUTE_WHITELIST.includes(to.path)) {
