@@ -78,18 +78,18 @@ watch(
   () => props.cesiumViewer,
   (newVal, oldVal) => {
     if (newVal && !oldVal) {
-      initializeResourceManager();
+      initializeResourceManager(newVal);
     }
   },
   { immediate: true }
 );
 // 初始化影像地图方法
-function initializeResourceManager() {
+function initializeResourceManager(viewer) {
   console.log(foldersBasemap[0], "初始化viewer");
   resourceManagerCall.value = new ResourceManager(
     "BaseMapSwitcher",
     foldersBasemap,
-    props.cesiumViewer
+    viewer
   );
   // 设置矢量图层默认可见
   const rasterResource = foldersBasemap[0].resources.find(

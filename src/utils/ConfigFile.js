@@ -1,6 +1,7 @@
 export const ROUTE_WHITELIST = [
   "/login",
   "/three/cesium/cesiumLayer",
+  "/three/cesium/SplitScreenCesium",
   "/three/mapBox/mapBoxLayer",
 ];
 export const ininCoordinates = {

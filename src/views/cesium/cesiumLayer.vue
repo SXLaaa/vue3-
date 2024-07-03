@@ -22,8 +22,7 @@
       @call-parent-method="handleMessageFromChild"
       :parent-method="handleMessageFromChild"
     />
-    <!-- <div id="cesiumContainer"></div> -->
-    <SplitScreenCesium />
+    <div id="cesiumContainer"></div>
   </div>
 </template>
 
@@ -32,9 +31,9 @@ import { ref, reactive, onMounted } from "vue";
 import DataSource from "@/components/DataSource/DataSource.vue"; // 资源目录
 import BaseMapSwitcher from "@/components/BaseMapSwitcher/BaseMapSwitcher.vue"; // 地图开关
 import MapOperation from "@/components/MapOperation/MapOperation.vue"; // 地图操作
-import SplitScreenCesium from "@/components/SplitScreenCesium/SplitScreenCesium.vue"; // 地图操作
 
 import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 import { ininCoordinates } from "@/utils/ConfigFile.js"; // 引入全局白名单
 
 export default {
@@ -43,12 +42,12 @@ export default {
     DataSource,
     BaseMapSwitcher,
     MapOperation,
-    SplitScreenCesium,
   },
   setup() {
     const viewer = ref(null);
     const isMenuOpen = ref(true); // 默认设置为展开状态
     const store = useStore();
+    const router = useRouter();
     const groupedFunctionButtons = reactive([
       {
         title: "基础操作",
@@ -181,6 +180,10 @@ export default {
     };
     const handleMessageFromChild = (DataSource) => {
       console.log(DataSource, DataSource.label, "0-0-=0-=00-");
+      // 跳转分屏对比
+      router.push({
+        name: "cesiumLayerSplite",
+      });
     };
     return {
       viewer,
