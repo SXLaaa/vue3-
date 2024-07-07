@@ -2,7 +2,7 @@
  * @FilePath: /vue3-koa2-web/src/components/ScaleScaling/ScaleScaling.vue
  * @Author: shixiaolei
  * @Date: 2024-07-03 15:48:18
- * @LastEditTime: 2024-07-04 15:40:26
+ * @LastEditTime: 2024-07-07 15:08:18
  * @LastEditors: shixiaolei
  * @Description: 
 -->
@@ -21,6 +21,7 @@ const props = defineProps({
     default: () => null,
   },
 });
+// 获取viewer视图中心
 function pickCenter() {
   let viewer = props.viewer;
   var ellipsoid = viewer.camera.pickEllipsoid(
@@ -37,6 +38,7 @@ function pickCenter() {
     lat: lat,
   };
 }
+// 放大缩小比例尺 1放大 0缩小
 function zoomByBound(flag) {
   const center = pickCenter();
   let viewer = props.viewer;
@@ -74,20 +76,24 @@ function zoomByBound(flag) {
   flex-direction: column;
   background: white;
   .add {
-    width: 100%;
-    height: 50%;
+    width: 40px;
+    height: 40px;
     font-size: 26px;
     color: black;
+    text-align: center;
+    line-height: 40px;
     &:hover {
       background: rgb(66, 61, 61);
       cursor: pointer;
     }
   }
   .reduce {
-    width: 100%;
-    height: 50%;
+    width: 40px;
+    height: 40px;
     font-size: 26px;
     color: black;
+    text-align: center;
+    line-height: 40px;
     &:hover {
       background: rgb(66, 61, 61);
       cursor: pointer;

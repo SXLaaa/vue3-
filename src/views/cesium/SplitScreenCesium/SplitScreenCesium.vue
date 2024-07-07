@@ -2,7 +2,7 @@
  * @Author: shixl shixl@dist.com.cn
  * @Date: 2024-07-02 17:06:50
  * @LastEditors: shixiaolei
- * @LastEditTime: 2024-07-04 15:58:28
+ * @LastEditTime: 2024-07-07 15:11:00
  * @FilePath: /vue3-koa2-web/src/views/Cesium/SplitScreenCesium/SplitScreenCesium.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -15,6 +15,7 @@
     <div ref="leftCesiumContainer" class="cesium-viewer"></div>
     <div style="height: 100%; width: 10px; background-color: red"></div>
     <div ref="rightCesiumContainer" class="cesium-viewer"></div>
+    <!-- 比例尺组件 -->
     <ScaleScaling :viewer="leftViewer" />
   </div>
 </template>
@@ -93,6 +94,7 @@ onMounted(() => {
   // 同步Camera
   syncCameras(leftViewer.value, rightViewer.value);
 });
+// 定位到指定坐标
 function locationCesium() {
   let viewer = leftViewer.value;
   const initialOrientation = new Cesium.HeadingPitchRoll.fromDegrees(
