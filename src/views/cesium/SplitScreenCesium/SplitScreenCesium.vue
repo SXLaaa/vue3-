@@ -2,23 +2,20 @@
  * @Author: shixl shixl@dist.com.cn
  * @Date: 2024-07-02 17:06:50
  * @LastEditors: shixiaolei
- * @LastEditTime: 2024-07-03 17:39:54
+ * @LastEditTime: 2024-07-04 15:58:28
  * @FilePath: /vue3-koa2-web/src/views/Cesium/SplitScreenCesium/SplitScreenCesium.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <template>
   <div class="split-screen-container">
     <div class="toolAction">
-      <button @click="configureCesium">定位</button>
+      <button @click="locationCesium">定位</button>
       <button @click="backHome">返回</button>
     </div>
     <div ref="leftCesiumContainer" class="cesium-viewer"></div>
     <div style="height: 100%; width: 10px; background-color: red"></div>
     <div ref="rightCesiumContainer" class="cesium-viewer"></div>
-    222222
     <ScaleScaling :viewer="leftViewer" />
-    33333
-    <MapOperation />
   </div>
 </template>
 
@@ -28,8 +25,7 @@ import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import { ininCoordinates } from "@/utils/ConfigFile.js"; // 引入全局白名单
 import ResourceManager from "@/utils/ResourceManager.js";
-import ScaleScaling from "@/components/ScaleScaling/ScaleScaling.vue";
-import MapOperation from "@/components/MapOperation/MapOperation.vue"; // 地图操作
+import ScaleScaling from "@/components/ScaleScaling/ScaleScaling.vue"; // 比例尺缩放
 
 const store = useStore();
 const router = useRouter();
@@ -97,17 +93,14 @@ onMounted(() => {
   // 同步Camera
   syncCameras(leftViewer.value, rightViewer.value);
 });
-function configureCesium(viewer) {
-  viewer.extend(Cesium.viewerCesiumNavigationMixin);
-  viewer._cesiumWidget._creditContainer.style.display = "none"; // 隐藏版权信息
-  viewer.scene.fxaa = false; // 改善实体的文字和图片清晰度
-  viewer.scene.globe.maximumScreenSpaceError = 4 / 3; // 降低性能提供图片质量
+function locationCesium() {
+  let viewer = leftViewer.value;
   const initialOrientation = new Cesium.HeadingPitchRoll.fromDegrees(
     0.0,
     -90.0,
     0.0
   ); // 保持默认视角朝向
-  viewer.camera.flyTo({
+  viewer.camera.setView({
     destination: Cesium.Cartesian3.fromDegrees(
       ininCoordinates.longitude,
       ininCoordinates.latitude,

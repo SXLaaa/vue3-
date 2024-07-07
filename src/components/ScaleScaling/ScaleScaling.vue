@@ -2,7 +2,7 @@
  * @FilePath: /vue3-koa2-web/src/components/ScaleScaling/ScaleScaling.vue
  * @Author: shixiaolei
  * @Date: 2024-07-03 15:48:18
- * @LastEditTime: 2024-07-03 16:24:32
+ * @LastEditTime: 2024-07-04 15:40:26
  * @LastEditors: shixiaolei
  * @Description: 
 -->
@@ -22,6 +22,7 @@ const props = defineProps({
   },
 });
 function pickCenter() {
+  let viewer = props.viewer;
   var ellipsoid = viewer.camera.pickEllipsoid(
     new Cesium.Cartesian2(
       viewer.canvas.clientWidth / 2,
@@ -38,6 +39,7 @@ function pickCenter() {
 }
 function zoomByBound(flag) {
   const center = pickCenter();
+  let viewer = props.viewer;
   var height = viewer.camera.positionCartographic.height;
   const camera = viewer.camera;
   var boundingSph = new Cesium.BoundingSphere(
@@ -63,18 +65,33 @@ function zoomByBound(flag) {
 </script>
 <style lang="scss" scoped>
 .scale-scaling {
-  padding: 10px 0;
   position: absolute;
-  top: 0;
+  bottom: 12%;
+  right: 52%;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: column;
+  background: white;
   .add {
-    width: 10px;
-    height: 10px;
+    width: 100%;
+    height: 50%;
+    font-size: 26px;
+    color: black;
+    &:hover {
+      background: rgb(66, 61, 61);
+      cursor: pointer;
+    }
   }
   .reduce {
-    width: 10px;
-    height: 10px;
-    background: white;
+    width: 100%;
+    height: 50%;
+    font-size: 26px;
     color: black;
+    &:hover {
+      background: rgb(66, 61, 61);
+      cursor: pointer;
+    }
   }
 }
 </style>
