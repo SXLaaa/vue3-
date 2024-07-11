@@ -1,7 +1,14 @@
+/*
+ * @FilePath: /vue3-koa2-web/src/utils/ConfigFile.js
+ * @Author: shixiaolei
+ * @Date: 2024-06-26 10:11:51
+ * @LastEditTime: 2024-07-10 16:26:31
+ * @LastEditors: shixiaolei
+ * @Description: 
+ */
 export const ROUTE_WHITELIST = [
   "/login",
   "/three/cesium/cesiumLayer",
-  "/three/cesium/SplitScreenCesium",
   "/three/mapBox/mapBoxLayer",
 ];
 export const ininCoordinates = {

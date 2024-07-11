@@ -23,6 +23,9 @@
       :parent-method="handleMessageFromChild"
     />
     <div id="cesiumContainer"></div>
+    <div class="container">
+      <component :is="currentComponent"></component>
+    </div>
   </div>
 </template>
 
@@ -31,7 +34,8 @@ import { ref, reactive, onMounted } from "vue";
 import DataSource from "@/components/DataSource/DataSource.vue"; // 资源目录
 import BaseMapSwitcher from "@/components/BaseMapSwitcher/BaseMapSwitcher.vue"; // 地图开关
 import MapOperation from "@/components/MapOperation/MapOperation.vue"; // 地图操作
-
+import SplitScreenCesium from "./SplitScreenCesium/SplitScreenCesium.vue";
+import RolluAnalysis from "./RolluAnalysis/RolluAnalysis.vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import { ininCoordinates } from "@/utils/ConfigFile.js"; // 引入全局白名单
@@ -42,6 +46,8 @@ export default {
     DataSource,
     BaseMapSwitcher,
     MapOperation,
+    SplitScreenCesium,
+    RolluAnalysis,
   },
   setup() {
     const viewer = ref(null);
@@ -127,10 +133,12 @@ export default {
         isOpen: false,
       },
     ]);
+    const container = ref(null);
+    const currentComponent = ref("RolluAnalysis");
     onMounted(async () => {
-      const container = document.getElementById("cesiumContainer");
+      container.value = document.getElementById("cesiumContainer");
       if (container) {
-        viewer.value = new Cesium.Viewer(container, {
+        viewer.value = new Cesium.Viewer(container.value, {
           animation: false,
           timeline: false,
           geocoder: false, // 是否显示geocoder小器件，右上角查询按钮
@@ -180,17 +188,28 @@ export default {
     };
     const handleMessageFromChild = (DataSource) => {
       console.log(DataSource, DataSource.label, "0-0-=0-=00-");
-      // 跳转分屏对比
-      router.push({
-        name: "cesiumLayerSplite",
-      });
+      if (DataSource.drawType == "roller") {
+        switchComponent("RolluAnalysis");
+      } else if (DataSource.drawType == "compare") {
+        switchComponent("SplitScreenCesium");
+        // 跳转分屏对比
+        // router.push({
+        //   name: "cesiumLayerSplite",
+        // });
+      }
+    };
+    // 切换组件
+    const switchComponent = (componentName) => {
+      currentComponent.value = componentName;
     };
     return {
       viewer,
       isMenuOpen,
       toggleMenu,
       groupedFunctionButtons,
+      currentComponent,
       handleMessageFromChild,
+      switchComponent,
     };
   },
 };
@@ -251,6 +270,13 @@ export default {
       left: 0;
       width: 100%; // 菜单收起时，宽度仍然为100%
     }
+  }
+  .container {
+    background: floralwhite;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 10000;
   }
 }
 </style>

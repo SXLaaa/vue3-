@@ -2,9 +2,9 @@
  * @FilePath: /vue3-koa2-web/src/components/ScaleScaling/ScaleScaling.vue
  * @Author: shixiaolei
  * @Date: 2024-07-03 15:48:18
- * @LastEditTime: 2024-07-07 15:08:18
+ * @LastEditTime: 2024-07-08 16:07:37
  * @LastEditors: shixiaolei
- * @Description: 
+ * @Description: 放大、缩小比例尺
 -->
 <template>
   <div class="scale-scaling">

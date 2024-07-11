@@ -113,17 +113,21 @@ export default {
         } else {
           startDraw();
         }
-        // 分屏对比
       } else if (platForm == "screen") {
+        // 分屏对比
         if (["compare"].includes(drawType)) {
           // emitCallParentMethod(resource); // 第一种
           // callParentMethod(resource); // 第二种
           props.parentMethod(resource); // 第三种
+        } else if (["roller"].includes(drawType)) {
+          // 卷帘对比
+          props.parentMethod(resource);
         }
       }
     };
     // 监听事件
     const startDraw = () => {
+      debugger;
       viewer.camera.flyTo({
         duration: 2,
         destination: Cesium.Cartesian3.fromDegrees(120.464, 37.355, 100000),

@@ -1,17 +1,16 @@
+<!--
+ * @FilePath: /vue3-koa2-web/src/views/Cesium/RolluAnalysis/RolluAnalysis.vue
+ * @Author: shixiaolei
+ * @Date: 2024-07-10 16:21:03
+ * @LastEditTime: 2024-07-10 17:21:10
+ * @LastEditors: shixiaolei
+ * @Description: 卷帘分析
+-->
 <template>
-  <div class="split-screen-container">
-    <div class="toolAction">
-      <button @click="locationCesium">定位</button>
-      <button @click="backHome">返回</button>
-    </div>
-    <div ref="leftCesiumContainer" class="cesium-viewer"></div>
-    <div style="height: 100%; width: 10px; background-color: red"></div>
-    <div ref="rightCesiumContainer" class="cesium-viewer"></div>
-    <!-- 比例尺组件 -->
-    <ScaleScaling :viewer="leftViewer" />
+  <div class="cesiumViewer">
+    <div ref="CesiumContainer" class="cesium-viewer"></div>
   </div>
 </template>
-
 <script setup>
 import { ref, reactive, onMounted } from "vue";
 import { useStore } from "vuex";
@@ -22,10 +21,8 @@ import ScaleScaling from "@/components/ScaleScaling/ScaleScaling.vue"; // 比例
 
 const store = useStore();
 const router = useRouter();
-const leftCesiumContainer = ref(null);
-const rightCesiumContainer = ref(null);
-const leftViewer = ref(null);
-const rightViewer = ref(null);
+const CesiumContainer = ref(null);
+const Viewer = ref(null);
 const foldersBasemap = reactive([
   {
     title: "底图",
@@ -72,19 +69,15 @@ onMounted(() => {
     imageryProvider: false, // cesium默认图层
     selectionIndicator: false, // 实体选中聚焦框
   };
-  leftViewer.value = new Cesium.Viewer(leftCesiumContainer.value, viewerOption);
-  rightViewer.value = new Cesium.Viewer(
-    rightCesiumContainer.value,
+  CesiumContainer.value = new Cesium.Viewer(
+    CesiumContainer.value,
     viewerOption
   );
   try {
-    configureCesiumLeft(leftViewer.value);
-    configureCesiumRight(rightViewer.value);
+    configureCesium(CesiumContainer.value);
   } catch (error) {
     console.error("Cesium configuration failed:", error);
   }
-  // 同步Camera
-  syncCameras(leftViewer.value, rightViewer.value);
 });
 // 定位到指定坐标
 function locationCesium() {
@@ -93,7 +86,7 @@ function locationCesium() {
     0.0,
     -90.0,
     0.0
-  ); // 保持默认视角朝向
+  );
   viewer.camera.setView({
     destination: Cesium.Cartesian3.fromDegrees(
       ininCoordinates.longitude,
@@ -107,77 +100,63 @@ function locationCesium() {
     },
   });
 }
-// 左右底图加载
-function configureCesiumLeft(viewer) {
-  let leftBolls = new ResourceManager(
-    "BaseMapSwitcher",
-    foldersBasemap,
-    viewer
-  );
-  const rasterResource = foldersBasemap[0].resources.find(
-    (resource) => resource.layerType === "raster"
-  );
-  leftBolls.updateResourceVisibility({
-    ...rasterResource,
-  });
+// 加载底图
+function configureCesium(viewer) {
+  // let leftBolls = new ResourceManager(
+  //   "BaseMapSwitcher",
+  //   foldersBasemap,
+  //   viewer
+  // );
+  // const rasterResource = foldersBasemap[0].resources.find(
+  //   (resource) => resource.layerType === "vector"
+  // );
+  // leftBolls.updateResourceVisibility({
+  //   ...rasterResource,
+  // });
 }
-
-function configureCesiumRight(viewer) {
-  let leftBolls = new ResourceManager(
-    "BaseMapSwitcher",
-    foldersBasemap,
-    viewer
+// 卷帘操作
+function vvvv(viewer) {
+  viewer.value.imageryLayers.addImageryProvider(
+    new Cesium.ArcGisMapServerImageryProvider({
+      url: "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer",
+    })
   );
-  const rasterResource = foldersBasemap[0].resources.find(
-    (resource) => resource.layerType === "vector"
+  // 设置卷帘
+  viewer.value.imageryLayers.splitDirection = 1;
+  viewer.value.imageryLayers.splitPosition = 0.5;
+  // 添加事件监听器，以便用户可以拖动卷帘
+  let isDragging = false;
+  let startX;
+  const screenSpaceHandler = new Cesium.ScreenSpaceEventHandler(
+    viewer.value.scene.canvas
   );
-  leftBolls.updateResourceVisibility({
-    ...rasterResource,
-  });
-}
-// 同步两个视图的Camera
-function syncCameras(leftViewer, rightViewer) {
-  leftViewer.scene.postRender.addEventListener(function () {
-    rightViewer.camera.setView({
-      destination: leftViewer.camera.position,
-      orientation: {
-        heading: leftViewer.camera.heading,
-        pitch: leftViewer.camera.pitch,
-        roll: leftViewer.camera.roll,
-      },
-    });
-  });
-}
-function backHome() {
-  router.push({
-    name: "cesiumLayer",
-  });
+  screenSpaceHandler.setInputAction((movement) => {
+    console.log("🚀 ~ handleMessageFromChild ~ movement:", movement);
+    startX = movement.position.x;
+    isDragging = true;
+  }, Cesium.ScreenSpaceEventType.LEFT_DOWN);
+  screenSpaceHandler.setInputAction((movement) => {
+    isDragging = false;
+  }, Cesium.ScreenSpaceEventType.LEFT_UP);
+  screenSpaceHandler.setInputAction((movement) => {
+    console.log("🚀 ~ screenSpaceHandler.setInputAction ~ movement:", movement);
+    if (isDragging) {
+      const delta = movement.endPosition.x - startX;
+      viewer.value.imageryLayers.splitPosition += delta / window.innerWidth;
+      startX = movement.startPosition.x;
+    }
+  }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
 }
 </script>
 
 <style scoped lang="scss">
-.split-screen-container {
-  display: flex;
-  position: relative;
-  .toolAction {
-    display: flex;
-    justify-content: space-between;
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    height: 20px;
-    width: 200px;
-    z-index: 10000;
-    background-color: gray;
-    button {
-      height: 20px;
-      width: 80px;
-    }
-  }
+.cesiumViewer {
+  width: 100%;
+  height: 100%;
 }
-
 .cesium-viewer {
-  width: calc(100% - 10px);
-  height: 100vh;
+  position: relative;
+  width: 100%;
+  height: 100%;
 }
 </style>

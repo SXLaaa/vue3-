@@ -288,13 +288,13 @@ class RasterServiceLoader {
           boundingBoxElements.getAttribute("SRS").split(":")[1]
         )
           ? [
-              parseFloat(boundingBoxElements.getAttribute("minx")),
-              parseFloat(boundingBoxElements.getAttribute("miny")),
-              parseFloat(boundingBoxElements.getAttribute("maxx")),
-              parseFloat(boundingBoxElements.getAttribute("maxy")),
-            ]
+            parseFloat(boundingBoxElements.getAttribute("minx")),
+            parseFloat(boundingBoxElements.getAttribute("miny")),
+            parseFloat(boundingBoxElements.getAttribute("maxx")),
+            parseFloat(boundingBoxElements.getAttribute("maxy")),
+          ]
           : // 如果是其他坐标系，可能需要转换为WGS84
-            null;
+          null;
         // coords属性：west, south, east, north
         // 根据给定的西经（west）、南纬（south）、东经（east）和北纬（north）坐标，创建一个表示矩形区域（Rectangle）的对象
         if (coords) {

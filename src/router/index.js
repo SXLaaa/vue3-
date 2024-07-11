@@ -2,7 +2,7 @@
  * @Author: shixl shixl@dist.com.cn
  * @Date: 2024-06-26 10:11:51
  * @LastEditors: shixiaolei
- * @LastEditTime: 2024-07-03 11:04:33
+ * @LastEditTime: 2024-07-10 16:26:22
  * @FilePath: /vue3-koa2-web/src/router/index.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -38,14 +38,6 @@ const routes = [
           title: "三维一张图(cesium)",
         },
         component: () => import("@/views/Cesium/cesiumLayer.vue"),
-      },
-      {
-        name: "cesiumLayerSplite",
-        path: "/three/cesium/SplitScreenCesium",
-        meta: {
-          title: "三维一张图(cesium分屏)",
-        },
-        component: () => import("@/views/Cesium/SplitScreenCesium/SplitScreenCesium.vue"),
       },
       {
         name: "mapBoxLayer",
