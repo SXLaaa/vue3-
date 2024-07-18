@@ -2,7 +2,7 @@
  * @Author: shixl shixl@dist.com.cn
  * @Date: 2024-06-26 10:11:51
  * @LastEditors: shixiaolei
- * @LastEditTime: 2024-07-10 16:26:22
+ * @LastEditTime: 2024-07-18 16:36:59
  * @FilePath: /vue3-koa2-web/src/router/index.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -77,7 +77,6 @@ async function loadAsyncRoutes() {
   if (userInfo.token) {
     try {
       const { menuList } = await API.getPermissionList();
-      console.log(menuList, "---menuList");
 
       let routes = utils.generateRoute(menuList);
       const modules = import.meta.glob("../views/*.vue"); // view下第一层级vue文件
@@ -115,25 +114,27 @@ router.beforeEach(async (to, from, next) => {
   if (ROUTE_WHITELIST.includes(to.path)) {
     document.title = to.meta.title;
     next();
-  } else if (to.name && router.hasRoute(to.name)) {
-    document.title = to.meta.title;
-    // 检查用户是否已登录
-    let userInfo =
-      JSON.parse(window.localStorage.getItem("manager")) &&
-      JSON.parse(window.localStorage.getItem("manager")).userInfo;
-    if (!userInfo) {
-      next("/login");
-    } else {
-      next();
-    }
   } else {
-    await loadAsyncRoutes();
-    let curRoute = router.getRoutes().find((item) => item.path === to.path);
-    if (curRoute) {
-      document.title = curRoute.meta.title;
-      next({ ...to, replace: true });
+    if (to.name && router.hasRoute(to.name)) {
+      document.title = to.meta.title;
+      // 检查用户是否已登录
+      let userInfo =
+        JSON.parse(window.localStorage.getItem("manager")) &&
+        JSON.parse(window.localStorage.getItem("manager")).userInfo;
+      if (!userInfo) {
+        next("/login");
+      } else {
+        next();
+      }
     } else {
-      next("/404");
+      await loadAsyncRoutes();
+      let curRoute = router.getRoutes().find((item) => item.path === to.path);
+      if (curRoute) {
+        document.title = curRoute.meta.title;
+        next({ ...to, replace: true });
+      } else {
+        next("/404");
+      }
     }
   }
 });

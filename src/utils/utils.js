@@ -3,8 +3,8 @@
  * @Version: 2.0
  * @Autor: shiXl
  * @Date: 2021-08-15 16:53:05
- * @LastEditors: shiXl
- * @LastEditTime: 2021-11-21 15:45:13
+ * @LastEditors: shixiaolei
+ * @LastEditTime: 2024-07-18 17:25:04
  */
 /**
  * 工具函数封装
@@ -41,32 +41,27 @@ export default {
   generateRoute(menuList) {
     let routes = [];
     const deepList = (list) => {
-      while (list.length) {
-        let item = list.pop();
-        if (item.action) {
-          routes.push({
-            name: item.component,
-            path: item.path,
-            meta: {
-              title: item.menuName,
-            },
-            component: item.component,
-          });
-        } else {
-          if (item.children) {
-            deepList(item.children);
-          } else {
-            routes.push({
-              name: item.component,
-              path: item.path,
-              meta: {
-                title: item.menuName,
-              },
-              component: item.component,
-            });
-          }
+      list.forEach(item => {
+        // 确保 item 是一个对象  
+        if (typeof item !== 'object' || item === null) {
+          console.error('Invalid menu item:', item);
+          return;
         }
-      }
+        const componentName = item.component || 'NotFound';
+        let route = {
+          name: item.name || componentName,
+          path: item.path,
+          meta: {
+            title: item.menuName || 'Untitled',
+          },
+          component: componentName,
+        };
+        if (item.children && Array.isArray(item.children)) {
+          route.children = [];
+          deepList(item.children, route.children);
+        }
+        routes.push(route);
+      });
     };
     deepList(menuList);
     return routes;
