@@ -23,9 +23,10 @@
       :parent-method="handleMessageFromChild"
     />
     <div id="cesiumContainer"></div>
-    <div class="container">
+    <!-- 下方组件是 分屏组件 还需优化-->
+    <!-- <div class="container">
       <component :is="currentComponent"></component>
-    </div>
+    </div> -->
   </div>
 </template>
 

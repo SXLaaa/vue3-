@@ -20,7 +20,7 @@ COPY . .
 RUN yarn run build
 
 # 第二阶段：Nginx服务阶段
-FROM nginx:latest
+FROM nginx:1.17.0
 
 # 复制Nginx配置文件
 COPY nginx.conf /etc/nginx/nginx.conf
