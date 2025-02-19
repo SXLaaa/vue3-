@@ -2,8 +2,8 @@
  * @Author: shixl shixl@dist.com.cn
  * @Date: 2024-06-26 10:11:51
  * @LastEditors: shixiaolei
- * @LastEditTime: 2024-07-18 16:36:59
- * @FilePath: /vue3-koa2-web/src/router/index.js
+ * @LastEditTime: 2025-02-19 17:35:35
+ * @FilePath: /vue3.0-koa2/vue3-koa2-web/src/router/index.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
 import { createRouter, createWebHashHistory } from "vue-router";
@@ -46,6 +46,14 @@ const routes = [
           title: "三维一张图(mapBox)",
         },
         component: () => import("@/views/MapBox/MapBox.vue"),
+      },
+      {
+        name: "deepSeek",
+        path: "/deepSeek",
+        meta: {
+          title: "deepSeek",
+        },
+        component: () => import("@/components/OtherFunction/deepSeek.vue"),
       },
     ],
   },
@@ -111,6 +119,7 @@ function checkPermission(path) {
 // 假设我们有以下白名单路由名称或路径
 
 router.beforeEach(async (to, from, next) => {
+  console.log(ROUTE_WHITELIST, 'ROUTE_WHITELIST')
   if (ROUTE_WHITELIST.includes(to.path)) {
     document.title = to.meta.title;
     next();
